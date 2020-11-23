@@ -1,8 +1,31 @@
+; imports (we can insert our own nls files here too)
 __includes [ "utilities.nls" ] ; all the boring but important stuff not related to content
+
+; the two main type of building users
+breed [staff-members staff-member]
+breed [visitors visitor]
 
 globals [
 ]
 
+; turtle variables
+turtles-own[
+  knowledge_level
+  walking_speed
+  gender
+  age
+]
+
+; breed specific variables
+staff-members-own[
+
+]
+
+visitors-own [
+  task
+]
+
+; patch variables
 patches-own [
 
 ]
@@ -10,9 +33,23 @@ patches-own [
 to setup
   clear-all
   setupMap
+  create-staff-members 10 [
+    setxy random-xcor random-ycor
+    set color red
+    set size 5
+  ]
+  create-visitors 50 [
+    setxy random-xcor random-ycor
+    set color green
+    set size 5
+  ]
+  reset-ticks
 end
 
 to go
+  ask turtles [
+    fd 1
+  ]
   tick ; next time step
 end
 @#$#@#$#@
