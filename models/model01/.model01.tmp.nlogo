@@ -1,5 +1,5 @@
 ; imports (we can insert our own nls files here too)
-__includes [ "imports/utilities.nls" "imports/evacuations.nls" "imports/test.nls" ] ; all the boring but important stuff not related to content
+__includes [ "imports/utilities.nls" ] "imports/evacuations.nls", "imports/test.nls" ] ; all the boring but important stuff not related to content
 
 ; the two main type of building users
 breed [staff-members staff-member]

@@ -1,0 +1,44 @@
+;=======================
+; Convenience functions
+;=======================
+
+;Sort a list of lists, on an element of a sublist
+to-report sort-with [ key lst ]
+  report sort-by [ [a b] -> (runresult key a) < (runresult key b) ] lst
+end
+
+
+; Warnings can not be supressed, and are presented in the output window.
+; Useful for things the use must know, such as conditions that should never occur, etc.
+to warning [string]
+  output-print "=================================="
+  output-print word "Warning ! " string
+  output-print "=================================="
+end
+
+; When running in verbose mode, output is generated in the output window, for nonesential information for the user
+; Useful for tracking what the model is doing, can be turned on/off
+to say [string]
+  if verbose? [
+    output-print string
+  ]
+end
+
+;debug is presented in the command output and is used for debug information, prints to the console
+;Messages that are only useful when fixing bugs
+to debug [string]
+  if debug? [
+    print string
+  ]
+end
+
+
+to setupMap
+  ;~~~~~choose the plan you want to use
+  ;; MAKE SURE THE BMP FILES ARE IN THE SAME FOLDER WHERE YOU SAVE YOUR MODEL YOU CAN MAKE CHANGES USING THE BUCKET TOOL IN PAINT TO MAKE THE FLOORPLAN AS COMPLEX OR SIMPLE AS YOU WANT
+  ;coloured floorplan has exits/entrances in red, internal stairwells in yellow, elevators in gray, doors in cyan, toilets in green and kitchen counters and reception in lila
+  import-pcolors "data/coloured_plan.png"
+  
+  ; simplified floorplan only has the exits in red, walls in black
+  ;import-pcolors "data/blackwhite_plan.png"
+end
