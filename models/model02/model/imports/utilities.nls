@@ -37,10 +37,10 @@ to setupMap
   ;~~~~~choose the plan you want to use
   ;; MAKE SURE THE BMP FILES ARE IN THE SAME FOLDER WHERE YOU SAVE YOUR MODEL YOU CAN MAKE CHANGES USING THE BUCKET TOOL IN PAINT TO MAKE THE FLOORPLAN AS COMPLEX OR SIMPLE AS YOU WANT
   ;coloured floorplan has exits/entrances in red, internal stairwells in yellow, elevators in gray, doors in cyan, toilets in green and kitchen counters and reception in lila
-  ;import-pcolors "data/coloured_plan.png"
+  import-pcolors "data/coloured_plan.png"
   
   ; simplified floorplan only has the exits in red, walls in black
-  import-pcolors "data/blackwhite_plan.png"
+  ;import-pcolors "data/blackwhite_plan.png"
   
   clean-colors
 end

@@ -1,5 +1,5 @@
 ; imports (we can insert our own nls files here too)
-__includes [ "utilities.nls" ] ; all the boring but important stuff not related to content
+__includes [ "imports/utilities.nls" "imports/alarm.nls" ] ; all the boring but important stuff not related to content
 
 ; the two main type of building users
 breed [staff-members staff-member]
@@ -55,10 +55,10 @@ to go
 end
 @#$#@#$#@
 GRAPHICS-WINDOW
-224
+225
 10
-997
-823
+1001
+832
 -1
 -1
 3.0
@@ -72,9 +72,9 @@ GRAPHICS-WINDOW
 0
 1
 0
-254
+255
 0
-267
+270
 0
 0
 1

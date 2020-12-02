@@ -1,4 +1,5 @@
-__includes [ "utilities.nls" ] ; all the boring but important stuff not related to content
+; imports (we can insert our own nls files here too)
+__includes [ "imports/utilities.nls" "imports/alarm.nls" ] ; all the boring but important stuff not related to content
 
 ; the two main type of building users
 breed [staff-members staff-member]
@@ -54,10 +55,10 @@ to go
 end
 @#$#@#$#@
 GRAPHICS-WINDOW
-224
+225
 10
-997
-823
+1001
+832
 -1
 -1
 3.0
@@ -71,25 +72,14 @@ GRAPHICS-WINDOW
 0
 1
 0
-254
+255
 0
-267
+270
 0
 0
 1
 ticks
 30.0
-
-MONITOR
-0
-0
-0
-0
-NIL
-NIL
-17
-1
-11
 
 BUTTON
 10
@@ -213,6 +203,34 @@ familiarity
 1
 %
 HORIZONTAL
+
+MONITOR
+1057
+229
+1152
+274
+event duration
+event_duration
+17
+1
+11
+
+BUTTON
+1062
+294
+1125
+327
+alarm
+alarm
+NIL
+1
+T
+OBSERVER
+NIL
+A
+NIL
+NIL
+1
 
 @#$#@#$#@
 ## WHAT IS IT?
