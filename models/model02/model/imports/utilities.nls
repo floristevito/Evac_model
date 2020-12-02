@@ -49,16 +49,29 @@ end
 to clean-colors
   ;recolor pathces that recieved a scaled color due to image editing
   ask patches [
-    if pcolor > 60 and pcolor < 70  [
-      set pcolor black
-       
+    ;red
+    if pcolor > 10 and pcolor < 19.9 [
+      set pcolor red
+    ] 
+    ;cyan
+    if pcolor > 80 and pcolor < 89.9 [
+      set pcolor cyan
     ]
-    
-    if pcolor > 0 and pcolor < 9.9 [
-      set pcolor white
+    ;yellow
+    if pcolor > 40 and pcolor < 49.9  [
+      set pcolor yellow
+    ] 
+    ;green
+    if pcolor > 50 and pcolor < 59.9  [
+     set pcolor green
     ]
-    
-    if pcolor = 84.5 [set pcolor black]
+    ;lila (violet)
+    if pcolor > 110 and pcolor < 119.9  [
+      set pcolor violet       
+    ]
+    ;gray
+    if pcolor > 1 and pcolor < 9 [
+      set pcolor gray]
   ]
 end
 

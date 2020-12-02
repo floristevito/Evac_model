@@ -1,5 +1,5 @@
 ; imports (we can insert our own nls files here too)
-__includes [ "imports/utilities.nls" "imports/alarm.nls" ] ; all the boring but important stuff not related to content
+__includes [ "imports/utilities.nls" "imports/alarm.nls" "imports/move.nls" ] ; all the boring but important stuff not related to content
 
 ; the two main type of building users
 breed [staff-members staff-member]
@@ -25,32 +25,42 @@ visitors-own [
 
 ; turtle variables
 turtles-own[
-  knowledge_level
-  walking_speed
+  knowledge-level
+  walking-speed
+  running-speed
   gender
-  age
+  child?
 ]
 
+; we assume that 1 patch = 1.5 x 1.5 m
 to setup
   clear-all
   setupMap
-  create-staff-members 10 [
-    setxy random-xcor random-ycor
+  ; always create 50 staff members
+  create-staff-members 50 [
+    set shape "person"
     set color red
-    set size 5
+    set size 2
+    ifelse random 101 < percentage-female [set gender "female"][ set gender "male"]
+    set child? false
+    move-to one-of patches with [pcolor = white]
   ]
-  create-visitors 50 [
-    setxy random-xcor random-ycor
+  ; create the number of visitors
+  create-visitors agents-at-start - 50 [
+    set shape "person"
     set color green
-    set size 5
+    set size 2
+    ifelse random 101 < percentage-female [set gender "female"][set gender "male"]
+    ifelse random 101 < percentage-children [set child? true][set child? false]
+    move-to one-of patches with [pcolor = white]
   ]
+  ask turtles [determine-speeds]
   reset-ticks
 end
 
 to go
-   ask turtles [
-    fd 1
-  ]
+  ask staff-members [move-staff]
+  ask visitors [move-visitors]
   tick ; next time step
 end
 @#$#@#$#@
@@ -149,11 +159,11 @@ SLIDER
 238
 199
 271
-agents_at_start
-agents_at_start
-0
-100
-50.0
+agents-at-start
+agents-at-start
+50
+750
+504.0
 1
 1
 person
@@ -164,8 +174,8 @@ SLIDER
 282
 191
 315
-percentage_female
-percentage_female
+percentage-female
+percentage-female
 0
 100
 50.0
@@ -179,8 +189,8 @@ SLIDER
 322
 198
 355
-percentage_children
-percentage_children
+percentage-children
+percentage-children
 0
 100
 50.0
