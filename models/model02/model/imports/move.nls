@@ -1,12 +1,29 @@
 to move-staff
+  let heading heading - 30 + random 61
+  if patch-at-heading-and-distance heading 1 != nobody [
+  ifelse [pcolor] of patch-at-heading-and-distance heading 1 = black [rt 180][rt heading fd walking-speed]
+  ]
+  
+  
+  
+  
+  
   fd walking-speed
+  
+  
+  
 end
 
 to move-visitors
+  rt -30 + random 61
   fd walking-speed
+  
 end
 
+
+
 to determine-speeds
-  ifelse gender = "male" [set walking-speed 1.0 set running-speed 1.5][set walking-speed 0.9 set running-speed 1.4]
+  ifelse gender = "male" [set walking-speed 0.7 set running-speed 1][set walking-speed 0.6 set running-speed 0.9]
   if child? = true [set walking-speed walking-speed * 0.8 set running-speed running-speed * 0.8]
 end
+
