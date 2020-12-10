@@ -65,7 +65,6 @@ to go
     ask staff-members [move-staff]
     ask visitors [move-visitors]
   ][
-    ini-alarm
     ask staff-members [move-staff]
     ask visitors [move-visitors]
   ]
@@ -240,7 +239,7 @@ SWITCH
 330
 alarm?
 alarm?
-1
+0
 1
 -1000
 

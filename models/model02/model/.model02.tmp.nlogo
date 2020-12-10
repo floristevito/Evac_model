@@ -12,6 +12,7 @@ globals [
 
 patches-own [
   evac-path?
+  closeness-to-exit
 ]
 
 ; breed specific variables
@@ -55,6 +56,7 @@ to setup
     move-to one-of patches with [pcolor = white]
   ]
   ask turtles [determine-speeds]
+  ask patches [determine-closeness-to-exit]
   reset-ticks
 end
 
@@ -63,7 +65,6 @@ to go
     ask staff-members [move-staff]
     ask visitors [move-visitors]
   ][
-    ini-alarm
     ask staff-members [move-staff]
     ask visitors [move-visitors]
   ]
