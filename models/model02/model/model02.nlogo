@@ -239,7 +239,7 @@ SWITCH
 330
 alarm?
 alarm?
-0
+1
 1
 -1000
 
