@@ -1,13 +1,29 @@
-to show-evac-path
-  ask patches [
-    if evac-path?= True [
-      set pcolor white]
-  ]
+; ini alarm
+to ini-alarm
+  set alarm-start-time ticks
 end
 
-to hide-evac-path
+; function to show evacuation path
+to show-evac-path
   ask patches [
     if evac-path? = True [
       set pcolor orange]
   ]
 end
+
+;function to hide evacuation path
+to hide-evac-path
+  ask patches [
+    if evac-path? = True [
+      set pcolor white]
+  ]
+end
+
+;reporter that reports the amount of ticks (seconds) the alarm went of
+to-report event-duration
+  let current-time ticks
+  report alarm-start-time - current-time
+end
+
+
+  

@@ -7,7 +7,7 @@ breed [visitors visitor]
 
 globals [
   all-colors
-
+  alarm-start-time
 ]
 
 patches-own [
@@ -59,8 +59,14 @@ to setup
 end
 
 to go
-  ask staff-members [move-staff]
-  ask visitors [move-visitors]
+  ifelse alarm? = False [
+    ask staff-members [move-staff]
+    ask visitors [move-visitors]
+  ][
+    ini-alarm
+    ask staff-members [move-staff]
+    ask visitors [move-visitors]
+  ]
   tick ; next time step
 end
 @#$#@#$#@
@@ -220,7 +226,7 @@ MONITOR
 1152
 274
 event duration
-event_duration
+event-duration
 17
 1
 11
@@ -230,8 +236,8 @@ SWITCH
 297
 1164
 330
-alarm
-alarm
+alarm?
+alarm?
 1
 1
 -1000
