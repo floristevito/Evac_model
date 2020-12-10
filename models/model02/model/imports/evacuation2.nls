@@ -1,0 +1,22 @@
+to determine-closeness-to-exit ;for all patches with pcolor = red and pcolor one-of neighbours8 = orange
+  ask patches with [pcolor = red and any? neighbors with [pcolor = orange]]
+  [
+    set closeness-to-exit 0
+    ask neighbors with [pcolor = orange]
+    [set closeness-to-exit 1
+      set pcolor blue
+    ]
+  ]
+  
+  let counter 1
+  while [counter < 500] 
+  [
+    ask patches with [closeness-to-exit = counter]
+    [ask neighbors with [pcolor = orange ] [
+      if counter + 1 > closeness-to-exit [
+        set closeness-to-exit counter + 1
+        set pcolor blue
+      ]]]
+   set counter counter + 1 
+  ] 
+end

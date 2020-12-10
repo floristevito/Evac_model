@@ -1,10 +1,11 @@
-; imports (we can insert our own nls files here too)
-__includes [ "imports/utilities.nls" "imports/alarm.nls" "imports/move.nls" "imports/evacuation.nls"] ; all the boring but important stuff not related to content
+; imports
+__includes [ "imports/utilities.nls" "imports/alarm.nls" "imports/move.nls" "imports/evacuation2.nls"]
 
 ; the two main type of building users
 breed [staff-members staff-member]
 breed [visitors visitor]
 
+;define variables
 globals [
   all-colors
   alarm-start-time
@@ -15,7 +16,6 @@ patches-own [
   closeness-to-exit
 ]
 
-; breed specific variables
 staff-members-own[
 
 ]
@@ -24,7 +24,6 @@ visitors-own [
   task
 ]
 
-; turtle variables
 turtles-own[
   knowledge-level
   walking-speed
