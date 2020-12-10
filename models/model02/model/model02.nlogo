@@ -1,5 +1,5 @@
 ; imports (we can insert our own nls files here too)
-__includes [ "imports/utilities.nls" "imports/alarm.nls" "imports/move.nls" ] ; all the boring but important stuff not related to content
+__includes [ "imports/utilities.nls" "imports/alarm.nls" "imports/move.nls" "imports/evacuation.nls"] ; all the boring but important stuff not related to content
 
 ; the two main type of building users
 breed [staff-members staff-member]
@@ -225,22 +225,16 @@ event_duration
 1
 11
 
-BUTTON
-1062
-294
-1125
-327
+SWITCH
+1061
+297
+1164
+330
 alarm
 alarm
-NIL
 1
-T
-OBSERVER
-NIL
-A
-NIL
-NIL
 1
+-1000
 
 @#$#@#$#@
 ## WHAT IS IT?
