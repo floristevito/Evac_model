@@ -18,8 +18,6 @@ to move-visitors
   fd walking-speed  
 end
 
-
-
 to determine-speeds
   ifelse gender = "male" [set walking-speed 0.7 set running-speed 1][set walking-speed 0.6 set running-speed 0.9]
   if child? = true [set walking-speed walking-speed * 0.8 set running-speed running-speed * 0.8]
