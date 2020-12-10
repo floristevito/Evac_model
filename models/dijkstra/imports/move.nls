@@ -1,0 +1,23 @@
+to move-staff
+  set heading heading - 30 + random 61
+  let dest-patch patch-at-heading-and-distance heading walking-speed
+  while [dest-patch = nobody or [pcolor] of dest-patch = black] [
+    set heading heading - 30 + random 61
+    set dest-patch patch-at-heading-and-distance heading walking-speed 
+  ]
+  fd walking-speed  
+end
+
+to move-visitors
+  ;rt -30 + random 61
+  ;fd walking-speed
+  
+end
+
+
+
+to determine-speeds
+  ifelse gender = "male" [set walking-speed 0.7 set running-speed 1][set walking-speed 0.6 set running-speed 0.9]
+  if child? = true [set walking-speed walking-speed * 0.8 set running-speed running-speed * 0.8]
+end
+

@@ -1,0 +1,124 @@
+to-report Total-expected-cost [x]     ;; report the total cost of the path, f(x) = g(x) + h(x) in original algorithm
+  
+  let answer Cost-path + Heuristic x
+ ; debug (word "Running total-expected-costs for " x " and the value is " answer)
+  report answer      ;; report the sum of g(x) + h(x) costs
+end
+
+to-report Heuristic [y]
+ ; debug word "Running heuristic for " y
+  report distance y
+end
+
+to-report A* [Start Goal valid-map]
+  ; clear all the information in the agents, and reset them
+  ask valid-map with [visited?]            ;;initialising the closed list valid-map as empty list
+  [
+    debug (word who " is starting valid map with visited? = true")
+    set parent nobody                       ;; initialise parent value
+    set Cost-path 0                         ;; initialise g(x) costs
+    set visited? false                      ;; initialises patch(es) visited as false. visited? is patches-own prcedure true/false
+    set active? false                       ;; initialises patch(es) as not active. active? is patches-own prcedure true/false
+  ]
+  
+  ask Start                                ;; we will now add the start node to the open list. initialises the 'open list' as a an empty list. The open list is a list of the current nodes (neighbours) under inspection, from which one will be chosen and then added to the closed list. This is the node with the lowest costs. If multiple nodes have the same low cost, a random one of these will be chosen
+  [
+    set parent self                         ;; self reports this turtle, patch or link. In this case the patch. this will become the parent node = the start node. 
+    set visited? true                       ;; visited? is true, meaning the 
+    set active? true
+  ]
+  ; exists? indicates if in some instant of the search there are no options to continue.
+  ; In this case, there is no path connecting #Start and #Goal
+  
+  let exists? true
+  
+  ; The searching loop is executed while we don't reach the #Goal and we think a path exists
+  debug sentence who " is about to entered the while loop of A*"
+  let counter 0
+  while [not [visited?] of Goal and exists?] ; as long as goal has visited not true and exists = true, keep on repeating
+  [
+    set counter counter + 1
+    if counter = 100000 [
+      warning "Premature exit of A*"
+      report []
+    ]
+    
+    ; We only work on the valid pacthes that are active
+    let options valid-map with [active?]
+    
+       
+    ; If any
+    ifelse any? options
+    [
+      debug (word "There are " count options " options")
+      ; Take one of the active patches with minimal expected cost
+      ask min-one-of options [Total-expected-cost Goal] 
+      [
+        debug (word "we are in min-one-of options [Total-expected-cost Goal] ")
+        ; Store its real cost (to reach it) to compute the real cost of its children
+        let Cost-path-father Cost-path
+        debug (word "Got a cost for father " Cost-path-father) 
+        ; and deactivate it, because its children will be computed right now
+        set active? false
+        ; Compute its valid neighbors and look for an extension of the path
+        let valid-neighbors neighbors with [member? self valid-map]
+        debug (word "patch" pxcor pycor " has these neightbours " valid-neighbors)
+        ask valid-neighbors
+        [
+        debug (word "I am a neighbour patch: " pxcor " " pycor )
+          ; There are 2 types of valid neighbors:
+          ;   - Those that have never been visited (therefore, the path we are building is the
+          ;       best for them right now)
+          ;   - Those that have been visited previously (therefore we must check if the path we
+          ;       are building is better or not, by comparing its expected length with the one
+          ;       stored in the patch)
+          ; One trick to work with both type uniformly is to give for the first case an upper
+          ;   bound big enough to be sure that the new path will always be smaller.
+          let t ifelse-value visited? [ Total-expected-cost Goal] [999999]
+          
+          ; If this temporal cost is worse than the new one, we substitute the information in
+          ;   the patch to store the new one (with the neighbors of the first case, it will be
+          ;   always the case)
+          debug word "temporary cost t is " t
+          if t > (Cost-path-father + distance myself + Heuristic Goal)
+          [
+            debug word "t > (Cost-path-father + distance myself + Heuristic #Goal) and t is " t
+            ; The current patch becomes the father of its neighbor in the new path
+            set parent myself
+            set visited? true
+            set active? true
+            ; and store the real cost in the neighbor from the real cost of its father
+            set Cost-path Cost-path-father + distance parent
+            set Final-Cost Cost-path 
+            debug (word "My final cost is " final-cost)
+          ] 
+         debug (word "t is smaller than (Cost-path-father + distance myself + Heuristic Goal) : " t )
+        ] 
+      ] 
+    ]
+    ; If there are no more options, there is no path between #Start and #Goal
+    [
+      set exists? false
+    ] 
+  ] ; end while
+  ; After the searching loop, if there exists a path
+  ifelse exists?
+  [
+    ; We extract the list of patches in the path, form #Start to #Goal by jumping back from
+    ;   #Goal to #Start by using the fathers of every patch
+    let current Goal
+    set Final-Cost (precision [Cost-path] of Goal 3)
+    let rep (list current)
+    While [current != Start]
+    [
+      set current [parent] of current
+      set rep fput current rep
+    ]
+    report rep
+  ]
+  [
+    ; Otherwise, there is no path, and we return False
+    report []
+  ]
+end
+
