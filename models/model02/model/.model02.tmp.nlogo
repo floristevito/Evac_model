@@ -1,105 +1,77 @@
-__includes [ "utilities.nls" ] ; all the boring but important stuff not related to content
+; imports (we can insert our own nls files here too)
+__includes [ "imports/utilities.nls" "imports/alarm.nls" "imports/move.nls" ] ; all the boring but important stuff not related to content
 
+; the two main type of building users
+breed [staff-members staff-member]
 breed [visitors visitor]
-breed [staff staffmember]
-
-turtles-own [
-  destination ; now this is still a particular patch at the main entrance
-  path-to-exit ; based on Dijkstra algorithm of shortest path
-  path-walked
-]
 
 globals [
-  p-valids ; patches where one can walk
+all-colors
+
 ]
 
 patches-own [
-  dijkstra-dist
+
 ]
 
+; breed specific variables
+staff-members-own[
+
+]
+
+visitors-own [
+  task
+]
+
+; turtle variables
+turtles-own[
+  knowledge-level
+  walking-speed
+  running-speed
+  gender
+  child?
+]
+
+; we assume that 1 patch = 1.5 x 1.5 m
 to setup
   clear-all
   setupMap
-  ;place visitors and staff randomly on valid patches
-  ask n-of population_visitors patches with [pcolor = 9.9 or pcolor = 63.6 or pcolor = 103.5 or pcolor = 84.5 or pcolor = 14.8] [sprout-visitors 1[ set color green - 2 + random 7  ;; random shades look nice
-    set size 10]]  ;; easier to see]]
-  ask n-of population_staff patches with [pcolor = 9.9 or pcolor = 63.6 or pcolor = 103.5 or pcolor = 84.5 or pcolor = 14.8] [sprout-staff 1[ set color red - 2 + random 7  ;; random shades look nice
-    set size 10]]  ;; easier to see]]
-  set p-valids patches with [pcolor = 9.9 or pcolor = 84.5 or pcolor = 14.8]  ; all patches that are white, red or blue are allowed to stand on
-  ask turtles [choose-destination]
-  ask turtles [choose-path destination]
+  ; always create 50 staff members
+  create-staff-members 50 [
+    set shape "person"
+    set color red
+    set size 2
+    ifelse random 101 < percentage-female [set gender "female"][ set gender "male"]
+    set child? false
+    move-to one-of patches with [pcolor = white]
+  ]
+  ; create the number of visitors
+  create-visitors agents-at-start - 50 [
+    set shape "person"
+    set color green
+    set size 2
+    ifelse random 101 < percentage-female [set gender "female"][set gender "male"]
+    ifelse random 101 < percentage-children [set child? true][set child? false]
+    move-to one-of patches with [pcolor = white]
+  ]
+  ask turtles [determine-speeds]
   reset-ticks
 end
 
 to go
-  if not any? turtles [ stop ]
-  ask turtles [walk-out]
+  ask staff-members [move-staff]
+  ask visitors [move-visitors]
   tick ; next time step
-end
-
-to choose-destination
-  set destination patch 115 150 ; go to this one specific patch at the main entrance
-  ;set destination one-of patches with [pcolor = 14.8] ; pick a random exitpatch to go to
-end
-
-
-to-report abs-hdiff [#t #p] ; find difference in heading, in this version we don't use this
-  let _current [heading] of #t
-  let _new [towards #p] of #t
-  report abs (subtract-headings _current _new)
-end
-
-to walk-out
-  ifelse patch-here = destination [die][ ;if you already are on your destination you don't have to walk anymore
-      ;face one-of neighbors with [(member? self [path-to-exit] of myself)]
-  ;face max-one-of (neighbors with [(member? self [path-to-exit] of myself)]) [dijkstra-dist] ;face one of the patches around you that is in your route to the exits and has the lowest distance to the door (not where you just came from)
-    ifelse any? (neighbors4 with [(member? self [path-to-exit] of myself and not member? self [path-walked] of myself)] ) [
-      face min-one-of (neighbors4 with [(member? self [path-to-exit] of myself and not member? self [path-walked] of myself)])[abs-hdiff myself self]] [
-      face min-one-of (neighbors4 with [(member? self [path-to-exit] of myself)]) [abs-hdiff myself self]]
-
-    ;set path-walked (patch-set path-to-exit with [self != [patch-here] of myself])
-  fd 1
-    set path-walked (patch-set path-walked patch-here)
-  ]
-end
-
-to choose-path [endgoal]
-  ask p-valids
-    [ set dijkstra-dist -1]
-  let p patch-set patch-here
-  ask p
-    [ set dijkstra-dist 0] ; give all patches except the one you are on right now a value of -1
-  let s 0
-  while [not member? endgoal p] ; while the destination of the turtle is not jet in the path, keep going
-  [ set s s + 1
-      let newp patch-set ([neighbors4 with [ ((pcolor > 8 and pcolor < 20) or (pcolor > 80 and pcolor < 110) ) and ((dijkstra-dist < 0) or (dijkstra-dist > s)) ]] of p)
-      ; ask all your patches around you if you can walk there and if you have already been there
-      ask newp
-        [ set dijkstra-dist s ; give these patches the value of the amount of steps (patches) you would have to take as turtle to get there
-          ;set pcolor 28 ; this shows the working of the algorithm, only works with 1 turtle
-        ]
-      set p newp ]
-  let path patch-set endgoal ; start with your destination
-  while [not member? patch-here path] ; as long as you are not back at where you are standing now, keep going
-      [ let newpath patch-set ([one-of neighbors4 with [( dijkstra-dist = -1 + [dijkstra-dist] of (min-one-of path [dijkstra-dist])) and (count neighbors4 with [member? self path] = 1)] ] of path) ;add a patch to the path that is one step closer to you
-        let oldpath path
-        set path (patch-set oldpath newpath) ; add this patch to your path
-        ]
-  ;ask path [set pcolor green] ; this highlights your path in green, only works with 1 turtle
-  show path ; this shows the length of the path
-  set path-to-exit path
-  set path-walked patch-set patch-here
-
 end
 @#$#@#$#@
 GRAPHICS-WINDOW
-187
--140
-707
-411
+225
+10
+1001
+832
 -1
 -1
-2.0
+3.0
 1
 10
 1
@@ -118,6 +90,17 @@ GRAPHICS-WINDOW
 1
 ticks
 30.0
+
+SWITCH
+0
+0
+0
+0
+NIL
+NIL
+1
+1
+-1000
 
 BUTTON
 10
@@ -183,34 +166,92 @@ OUTPUT
 12
 
 SLIDER
-12
-203
-184
-236
-Population_visitors
-Population_visitors
-0
-5
-3.0
+18
+238
+199
+271
+agents-at-start
+agents-at-start
+50
+750
+504.0
 1
 1
-NIL
+person
 HORIZONTAL
 
 SLIDER
-12
-247
-184
-280
-Population_staff
-Population_staff
+18
+282
+191
+315
+percentage-female
+percentage-female
 0
+100
+50.0
 1
-1.0
 1
-1
-NIL
+%
 HORIZONTAL
+
+SLIDER
+19
+322
+198
+355
+percentage-children
+percentage-children
+0
+100
+50.0
+1
+1
+%
+HORIZONTAL
+
+SLIDER
+21
+363
+193
+396
+familiarity
+familiarity
+0
+100
+50.0
+1
+1
+%
+HORIZONTAL
+
+MONITOR
+1057
+229
+1152
+274
+event duration
+event_duration
+17
+1
+11
+
+BUTTON
+1062
+294
+1125
+327
+alarm
+alarm
+NIL
+1
+T
+OBSERVER
+NIL
+A
+NIL
+NIL
+1
 
 @#$#@#$#@
 ## WHAT IS IT?
