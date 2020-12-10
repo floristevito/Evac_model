@@ -9,9 +9,13 @@ to move-staff
 end
 
 to move-visitors
-  ;rt -30 + random 61
-  ;fd walking-speed
-  
+  set heading heading - 30 + random 61
+  let dest-patch patch-at-heading-and-distance heading walking-speed
+  while [dest-patch = nobody or [pcolor] of dest-patch = black] [
+    set heading heading - 30 + random 61
+    set dest-patch patch-at-heading-and-distance heading walking-speed 
+  ]
+  fd walking-speed  
 end
 
 
