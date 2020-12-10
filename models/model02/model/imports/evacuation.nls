@@ -1,0 +1,7 @@
+to determine-closeness-to-exit ;for all patches with pcolor = red and pcolor one-of neighbours8 = orange
+  if pcolor = red and any? neighbors with [pcolor = orange]
+  [
+    
+    print "het werkt"
+  ]
+end
