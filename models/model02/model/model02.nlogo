@@ -56,7 +56,7 @@ to setup
     move-to one-of patches with [pcolor = white]
   ]
   ask turtles [determine-speeds]
-  ask patches [determine-closeness-to-exit]
+  determine-closeness-to-exit
   reset-ticks
 end
 
