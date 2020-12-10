@@ -72,6 +72,11 @@ to clean-colors
     ;gray
     if pcolor > 1 and pcolor < 9 [
       set pcolor gray]
+    
+    ;orange
+    if pcolor > 21 and pcolor < 29 [
+      set pcolor orange
+      set evac-path? True]
   ]
 end
 

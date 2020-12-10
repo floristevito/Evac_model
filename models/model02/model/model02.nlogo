@@ -6,12 +6,12 @@ breed [staff-members staff-member]
 breed [visitors visitor]
 
 globals [
-all-colors
+  all-colors
 
 ]
 
 patches-own [
-
+  evac-path?
 ]
 
 ; breed specific variables
@@ -235,6 +235,40 @@ alarm
 1
 1
 -1000
+
+BUTTON
+1176
+276
+1324
+309
+hide evacuation path
+hide-evac-path
+NIL
+1
+T
+OBSERVER
+NIL
+NIL
+NIL
+NIL
+1
+
+BUTTON
+1176
+315
+1330
+348
+show evacuation path
+show-evac-path
+NIL
+1
+T
+OBSERVER
+NIL
+NIL
+NIL
+NIL
+1
 
 @#$#@#$#@
 ## WHAT IS IT?

@@ -1,0 +1,13 @@
+to show-evac-path
+  ask patches [
+    if evac-path?= True [
+      set pcolor white]
+  ]
+end
+
+to hide-evac-path
+  ask patches [
+    if evac-path? = True [
+      set pcolor orange]
+  ]
+end
