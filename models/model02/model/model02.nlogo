@@ -14,6 +14,7 @@ globals [
 patches-own [
   evac-path?
   closeness-to-exit
+  closeness-to-main-exit
 ]
 
 staff-members-own[
@@ -56,6 +57,7 @@ to setup
   ]
   ask turtles [determine-speeds]
   determine-closeness-to-exit
+  determine-closeness-to-main-exit
   reset-ticks
 end
 
@@ -64,9 +66,11 @@ to go
     ask staff-members [move-staff]
     ask visitors [move-visitors]
   ][
-    ask staff-members [move-staff]
-    ask visitors [move-visitors]
+    ask staff-members [evacuate]
+    ask visitors [evacuate]
   ]
+
+
   tick ; next time step
 end
 @#$#@#$#@
@@ -266,6 +270,23 @@ BUTTON
 348
 show evacuation path
 show-evac-path
+NIL
+1
+T
+OBSERVER
+NIL
+NIL
+NIL
+NIL
+1
+
+BUTTON
+86
+49
+149
+82
+NIL
+go
 NIL
 1
 T
