@@ -98,6 +98,9 @@ to evacuate
    
 end
 
-
+to guide-visitors-to-exit 
+  ask visitors in-radius staff-alerting-range
+  [set knows-all-exits? true]
+end
 
 

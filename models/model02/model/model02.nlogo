@@ -72,7 +72,10 @@ to go
     ask staff-members [move-staff]
     ask visitors [move-visitors]
   ][
-    ask staff-members [evacuate]
+    ask staff-members
+    [evacuate
+     guide-visitors-to-exit
+    ]
     ask visitors [evacuate]
   ]
   ask turtles [exit-building]
@@ -171,8 +174,8 @@ SLIDER
 agents-at-start
 agents-at-start
 50
-1500
-1500.0
+5000
+1588.0
 1
 1
 person
@@ -325,6 +328,21 @@ max-turtles-per-patch
 1
 8
 1.0
+1
+1
+NIL
+HORIZONTAL
+
+SLIDER
+19
+527
+248
+560
+staff-alerting-range
+staff-alerting-range
+0
+15
+15.0
 1
 1
 NIL
