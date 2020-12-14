@@ -1,12 +1,15 @@
 to determine-closeness-to-exit ;for all patches with pcolor = red and pcolor one-of neighbours8 = orange
-  ask patches with [pcolor != white and pcolor != cyan and pcolor != green]
-  [set closeness-to-exit 6000]
+  ask patches with [pcolor != white and pcolor != cyan and pcolor != green and pcolor != red]
+  [set closeness-to-exit 6000
+   set evac-path? false]
   ask patches with [pcolor = red]
   [
+    set evac-path? true
     set closeness-to-exit 0
     ask neighbors with [pcolor = white or pcolor = cyan]
     [set closeness-to-exit 1
-      set pcolor 23
+     set evac-path? true
+     set pcolor 23
     ]
   ]
   
@@ -38,8 +41,9 @@ end
 
 
 to determine-closeness-to-main-exit
-  ask patches with [pcolor != white and pcolor != cyan and pcolor != green]
-  [set closeness-to-main-exit 6000]
+  ask patches with [pcolor != white and pcolor != cyan and pcolor != green and pcolor != red]
+  [set closeness-to-main-exit 6000
+   set evac-path? false]
   ask patches with [(pxcor = 115  and pycor = 150) or (pxcor = 125  and pycor = 146)]
   [
     set closeness-to-main-exit 0
@@ -73,9 +77,9 @@ to evacuate
   [
     if any? patches in-radius 2 with [evac-path? = true]
     [ 
-      if min-one-of patches in-radius 2 with [count turtles-here < max-turtles-per-patch] [closeness-to-exit] != nobody
+      if min-one-of patches in-radius 2 with [count turtles-here < max-turtles-per-patch and evac-path? = true] [closeness-to-exit] != nobody
       [
-      face min-one-of patches in-radius 2 with [count turtles-here < max-turtles-per-patch] [closeness-to-exit]
+      face min-one-of patches in-radius 2 with [count turtles-here < max-turtles-per-patch and evac-path? = true] [closeness-to-exit]
       fd running-speed
       ]
       
@@ -84,9 +88,9 @@ to evacuate
   [
     if any? patches in-radius 2 with [evac-path? = true]
     [
-     if min-one-of patches in-radius 2 with [count turtles-here < max-turtles-per-patch] [closeness-to-main-exit] != nobody
+     if min-one-of patches in-radius 2 with [count turtles-here < max-turtles-per-patch and evac-path? = true] [closeness-to-main-exit] != nobody
      [ 
-      face min-one-of patches in-radius 2 with [count turtles-here < max-turtles-per-patch] [closeness-to-main-exit]
+      face min-one-of patches in-radius 2 with [count turtles-here < max-turtles-per-patch and evac-path? = true] [closeness-to-main-exit]
       fd running-speed
       ]
     ]

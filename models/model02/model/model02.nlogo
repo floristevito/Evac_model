@@ -101,8 +101,8 @@ GRAPHICS-WINDOW
 255
 0
 270
-0
-0
+1
+1
 1
 ticks
 30.0
@@ -171,8 +171,8 @@ SLIDER
 agents-at-start
 agents-at-start
 50
-750
-750.0
+1500
+1500.0
 1
 1
 person

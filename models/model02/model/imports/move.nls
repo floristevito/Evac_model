@@ -24,10 +24,10 @@ to determine-speeds
 end
 
 to exit-building
-  ;if [pcolor] of patch-here = red
-  ;[die]
-  if any? patches in-radius 1 with [pcolor = red]
+  if [pcolor] of patch-here = red
   [die]
+  ;if any? patches in-radius 1 with [pcolor = red]
+  ;[die]
 end
 
 to-report people-in-building
