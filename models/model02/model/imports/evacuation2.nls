@@ -51,19 +51,10 @@ to determine-closeness-to-main-exit
   ] 
 end
 
-to move-in-evacuate
-   let dest-patch patch-at-heading-and-distance heading walking-speed
-   while [dest-patch = nobody or [pcolor] of dest-patch = black]
-       [face one-of patches with [evac-path? = true]]
-   fd walking-speed
-end
-
-
 to evacuate
   ifelse any? patches in-radius 8 with [evac-path? = true]
   [ 
     face min-one-of patches in-radius 8 [closeness-to-exit]
-    ; move-in-evacuate
     fd walking-speed
   ]
   [
@@ -78,6 +69,17 @@ to evacuate
     ]   
   ]
 end
+
+to face-nearest-evac-path
+  let dest min-one-of patches in-radius 20 [closeness-to-exit]
+  while [any? patches with [pcolor = black] in-cone distance dest 0]
+  [
+    set dest one-of patches in-radius 20 with [evac-path? = true]
+  ]
+  face dest
+  fd walking-speed
+end
+
 
 
 

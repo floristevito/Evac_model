@@ -67,8 +67,8 @@ to go
     ask staff-members [move-staff]
     ask visitors [move-visitors]
   ][
-    ask staff-members [face-nearest-evac-path]
-    ask visitors [face-nearest-evac-path]
+    ask staff-members []
+    ask visitors [evacuate]
   ]
   ask turtles [exit-building]
 
@@ -167,7 +167,7 @@ agents-at-start
 agents-at-start
 50
 750
-50.0
+504.0
 1
 1
 person
