@@ -15,6 +15,7 @@ globals [
 patches-own [
   cyan?
   white?
+  green?
   evac-path?
   closeness-to-exit
   closeness-to-main-exit
@@ -100,8 +101,8 @@ GRAPHICS-WINDOW
 255
 0
 270
-1
-1
+0
+0
 1
 ticks
 30.0
@@ -171,7 +172,7 @@ agents-at-start
 agents-at-start
 50
 750
-404.0
+750.0
 1
 1
 person
@@ -179,9 +180,9 @@ HORIZONTAL
 
 SLIDER
 18
-368
+369
 245
-401
+402
 percentage-female
 percentage-female
 0
@@ -193,27 +194,12 @@ percentage-female
 HORIZONTAL
 
 SLIDER
-19
+18
 408
-245
+246
 441
 percentage-children
 percentage-children
-0
-100
-50.0
-1
-1
-%
-HORIZONTAL
-
-SLIDER
-21
-449
-244
-482
-familiarity
-familiarity
 0
 100
 50.0
@@ -315,15 +301,30 @@ visitors-in-building
 11
 
 SLIDER
-20
-489
-244
-522
+18
+448
+247
+481
 percentage-visitors-go-to-main-door
 percentage-visitors-go-to-main-door
 0
 100
 100.0
+1
+1
+NIL
+HORIZONTAL
+
+SLIDER
+18
+487
+247
+520
+max-turtles-per-patch
+max-turtles-per-patch
+1
+8
+1.0
 1
 1
 NIL

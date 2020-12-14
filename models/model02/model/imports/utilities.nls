@@ -63,8 +63,9 @@ to clean-colors
       set pcolor yellow
     ] 
     ;green
-    if pcolor > 50 and pcolor < 59.9  [
+    if pcolor > 60 and pcolor < 69.9  [
      set pcolor green
+     set green? true
     ]
     ;lila (violet)
     if pcolor > 110 and pcolor < 119.9  [
