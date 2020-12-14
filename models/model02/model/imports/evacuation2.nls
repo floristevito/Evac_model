@@ -1,10 +1,10 @@
 to determine-closeness-to-exit ;for all patches with pcolor = red and pcolor one-of neighbours8 = orange
-  ask patches with [pcolor != red and pcolor != orange]
-  [set closeness-to-exit 600]
-  ask patches with [pcolor = red and any? neighbors with [pcolor = orange]]
+  ask patches with [pcolor != orange and pcolor != white and pcolor != cyan]
+  [set closeness-to-exit 6000]
+  ask patches with [pcolor = red]
   [
     set closeness-to-exit 0
-    ask neighbors with [pcolor = orange]
+    ask neighbors with [pcolor = white or pcolor = cyan]
     [set closeness-to-exit 1
       set pcolor 23
     ]
@@ -14,24 +14,29 @@ to determine-closeness-to-exit ;for all patches with pcolor = red and pcolor one
   while [counter < 180] 
   [
     ask patches with [closeness-to-exit = counter]
-    [ask neighbors with [pcolor = orange ] 
+    [ask neighbors with [pcolor = orange or pcolor = white or pcolor = cyan] 
       [
       if counter + 1 > closeness-to-exit 
         [
         set closeness-to-exit counter + 1
         set pcolor 23
+        set evac-path? true
       ]]]
    set counter counter + 1 
-  ] 
+  ]
+  ask patches with [cyan? = true] [set pcolor cyan]
+  ask patches with [white? = true] [set pcolor white]  
 end
 
 to determine-closeness-to-main-exit
-  ask patches with [pcolor != red and pcolor != 23]
-  [set closeness-to-main-exit 600]
+  ask patches with [pcolor != orange and pcolor != white and pcolor != cyan]
+  [set closeness-to-main-exit 6000]
   ask patches with [(pxcor = 115  and pycor = 150) or (pxcor = 125  and pycor = 146)]
   [
     set closeness-to-main-exit 0
-    ask neighbors with [pcolor = 23]
+    ask patches in-radius 20 with [pcolor = red]
+    [set closeness-to-main-exit 0]
+    ask neighbors with [pcolor = white or pcolor = cyan]
     [set closeness-to-main-exit 1
     set pcolor orange] 
   ]
@@ -40,7 +45,7 @@ to determine-closeness-to-main-exit
   while [counter < 250] 
   [
     ask patches with [closeness-to-main-exit = counter]
-    [ask neighbors with [pcolor = 23 ] 
+    [ask neighbors with [pcolor = white or pcolor = cyan] 
       [
       if counter + 1 > closeness-to-main-exit 
         [
@@ -48,36 +53,28 @@ to determine-closeness-to-main-exit
         set pcolor orange
       ]]]
    set counter counter + 1 
-  ] 
+  ]
+  ask patches with [cyan? = true] [set pcolor cyan]
+  ask patches with [white? = true] [set pcolor white] 
 end
 
 to evacuate
-  ifelse any? patches in-radius 8 with [evac-path? = true]
-  [ 
-    face min-one-of patches in-radius 8 [closeness-to-exit]
-    fd walking-speed
-  ]
+  ifelse knows-all-exits? = true
   [
-    ifelse any? patches in-radius 20 with [evac-path? = true]
+    if any? patches in-radius 2 with [evac-path? = true]
     [ 
-      face min-one-of patches in-radius 20 with [evac-path? = true] [distance myself]
-      fd walking-speed
+      face min-one-of patches in-radius 2 [closeness-to-exit]
+      fd running-speed
     ]
-    [
-      face min-one-of patches with [evac-path? = true] [distance myself]
-      fd walking-speed
-    ]   
   ]
-end
-
-to face-nearest-evac-path
-  let dest min-one-of patches in-radius 20 [closeness-to-exit]
-  while [any? patches with [pcolor = black] in-cone distance dest 0]
   [
-    set dest one-of patches in-radius 20 with [evac-path? = true]
+    if any? patches in-radius 2 with [evac-path? = true]
+    [ 
+      face min-one-of patches in-radius 2 [closeness-to-main-exit]
+      fd running-speed
+    ]
   ]
-  face dest
-  fd walking-speed
+   
 end
 
 

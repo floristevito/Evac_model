@@ -13,6 +13,8 @@ globals [
 ]
 
 patches-own [
+  cyan?
+  white?
   evac-path?
   closeness-to-exit
   closeness-to-main-exit
@@ -27,7 +29,7 @@ visitors-own [
 ]
 
 turtles-own[
-  knowledge-level
+  knows-all-exits?
   walking-speed
   running-speed
   gender
@@ -44,6 +46,7 @@ to setup
     set color red
     set size 2
     ifelse random 101 < percentage-female [set gender "female"][ set gender "male"]
+    set knows-all-exits? true
     set child? false
     move-to one-of patches with [pcolor = white]
   ]
@@ -52,6 +55,7 @@ to setup
     set shape "person"
     set color green
     set size 2
+    ifelse random 101 > percentage-visitors-go-to-main-door [set knows-all-exits? true][set knows-all-exits? false]
     ifelse random 101 < percentage-female [set gender "female"][set gender "male"]
     ifelse random 101 < percentage-children [set child? true][set child? false]
     move-to one-of patches with [pcolor = white]
@@ -67,8 +71,8 @@ to go
     ask staff-members [move-staff]
     ask visitors [move-visitors]
   ][
-    ask staff-members [face-nearest-evac-path]
-    ask visitors [face-nearest-evac-path]
+    ask staff-members [evacuate]
+    ask visitors [evacuate]
   ]
   ask turtles [exit-building]
 
@@ -76,13 +80,13 @@ to go
 end
 @#$#@#$#@
 GRAPHICS-WINDOW
-225
-10
-1001
-832
+433
+21
+1391
+1035
 -1
 -1
-3.0
+3.711
 1
 10
 1
@@ -160,14 +164,14 @@ debug?
 
 SLIDER
 18
-324
-199
-357
+332
+245
+365
 agents-at-start
 agents-at-start
 50
 750
-50.0
+404.0
 1
 1
 person
@@ -176,7 +180,7 @@ HORIZONTAL
 SLIDER
 18
 368
-191
+245
 401
 percentage-female
 percentage-female
@@ -191,7 +195,7 @@ HORIZONTAL
 SLIDER
 19
 408
-198
+245
 441
 percentage-children
 percentage-children
@@ -206,7 +210,7 @@ HORIZONTAL
 SLIDER
 21
 449
-193
+244
 482
 familiarity
 familiarity
@@ -219,10 +223,10 @@ familiarity
 HORIZONTAL
 
 MONITOR
-1059
-299
-1154
-344
+1398
+293
+1493
+338
 event duration
 event-duration
 17
@@ -230,49 +234,15 @@ event-duration
 11
 
 SWITCH
-22
-514
-125
-547
+17
+290
+120
+323
 alarm?
 alarm?
 0
 1
 -1000
-
-BUTTON
-11
-99
-159
-132
-hide evacuation path
-hide-evac-path
-NIL
-1
-T
-OBSERVER
-NIL
-NIL
-NIL
-NIL
-1
-
-BUTTON
-11
-138
-165
-171
-show evacuation path
-show-evac-path
-NIL
-1
-T
-OBSERVER
-NIL
-NIL
-NIL
-NIL
-1
 
 BUTTON
 86
@@ -292,10 +262,10 @@ NIL
 1
 
 MONITOR
-1059
-249
-1223
-294
+1398
+243
+1562
+288
 NIL
 people-in-building
 17
@@ -303,10 +273,10 @@ people-in-building
 11
 
 PLOT
-1056
-27
-1491
-244
+1395
+21
+1830
+238
 people over time
 time
 people
@@ -323,10 +293,10 @@ PENS
 "visitors" 1.0 0 -13840069 true "" "plot visitors-in-building"
 
 MONITOR
-1227
-249
-1377
-294
+1566
+243
+1716
+288
 staff members in building
 staff-members-in-building
 17
@@ -334,15 +304,30 @@ staff-members-in-building
 11
 
 MONITOR
-1377
-250
-1493
-295
+1716
+244
+1832
+289
 visistors in building
 visitors-in-building
 17
 1
 11
+
+SLIDER
+20
+489
+244
+522
+percentage-visitors-go-to-main-door
+percentage-visitors-go-to-main-door
+0
+100
+100.0
+1
+1
+NIL
+HORIZONTAL
 
 @#$#@#$#@
 ## WHAT IS IT?

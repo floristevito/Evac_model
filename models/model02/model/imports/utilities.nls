@@ -56,6 +56,7 @@ to clean-colors
     ;cyan
     if pcolor > 80 and pcolor < 89.9 [
       set pcolor cyan
+      set cyan? true
     ]
     ;yellow
     if pcolor > 40 and pcolor < 49.9  [
@@ -73,10 +74,14 @@ to clean-colors
     if pcolor > 1 and pcolor < 9 [
       set pcolor gray]
     
+    ;white
+    if pcolor = 9.9 [
+      set white? true]
+    
     ;orange
-    if pcolor > 21 and pcolor < 29 [
-      set pcolor orange
-      set evac-path? True]
+    ;if pcolor > 21 and pcolor < 29 [
+      ;set pcolor orange
+      ;set evac-path? True]
   ]
 end
 
