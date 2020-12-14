@@ -29,16 +29,11 @@ to determine-closeness-to-exit ;for all patches with pcolor = red and pcolor one
   ]
   ask patches with [cyan? = true] [set pcolor cyan]
   ask patches with [white? = true] [set pcolor white]
-  ask patches with [green? = true] [set pcolor green]   
+  ask patches with [green? = true] [set pcolor green] 
+  ask patches [ if any? neighbors with [pcolor = black] [set closeness-to-exit closeness-to-exit + 1]]  
 end
 
-
-
-
-
-
-
-
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 to determine-closeness-to-main-exit
   ask patches with [pcolor != white and pcolor != cyan and pcolor != green and pcolor != red]
@@ -69,7 +64,9 @@ to determine-closeness-to-main-exit
   ]
   ask patches with [cyan? = true] [set pcolor cyan]
   ask patches with [white? = true] [set pcolor white]
-  ask patches with [green? = true] [set pcolor green]  
+  ask patches with [green? = true] [set pcolor green]
+  ask patches [ if any? neighbors with [pcolor = black] [set closeness-to-main-exit closeness-to-main-exit + 1]]
+    
 end
 
 to evacuate
@@ -100,7 +97,8 @@ end
 
 to guide-visitors-to-exit 
   ask visitors in-radius staff-alerting-range
-  [set knows-all-exits? true]
+  [set knows-all-exits? true
+   set response-timer 0]
 end
 
 

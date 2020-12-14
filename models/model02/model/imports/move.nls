@@ -1,7 +1,7 @@
 to move-staff
   set heading heading - 30 + random 61
   let dest-patch patch-at-heading-and-distance heading walking-speed
-  while [dest-patch = nobody or [pcolor] of dest-patch = black] [
+  while [dest-patch = nobody or [pcolor] of dest-patch = black or [pcolor] of dest-patch = 103.5 or [pcolor] of dest-patch = 125.8 or [pcolor] of dest-patch = 5] [
     set heading heading - 30 + random 61
     set dest-patch patch-at-heading-and-distance heading walking-speed 
   ]
@@ -11,7 +11,7 @@ end
 to move-visitors
   set heading heading - 30 + random 61
   let dest-patch patch-at-heading-and-distance heading walking-speed
-  while [dest-patch = nobody or [pcolor] of dest-patch = black] [
+  while [dest-patch = nobody or [pcolor] of dest-patch = black or [pcolor] of dest-patch = 103.5 or [pcolor] of dest-patch = 125.8 or [pcolor] of dest-patch = 5] [
     set heading heading - 30 + random 61
     set dest-patch patch-at-heading-and-distance heading walking-speed 
   ]

@@ -27,6 +27,7 @@ staff-members-own[
 
 visitors-own [
   task
+  response-timer
 ]
 
 turtles-own[
@@ -56,6 +57,7 @@ to setup
     set shape "person"
     set color green
     set size 2
+    set response-timer random average-response-time * 2
     ifelse random 101 > percentage-visitors-go-to-main-door [set knows-all-exits? true][set knows-all-exits? false]
     ifelse random 101 < percentage-female [set gender "female"][set gender "male"]
     ifelse random 101 < percentage-children [set child? true][set child? false]
@@ -68,15 +70,32 @@ to setup
 end
 
 to go
-  ifelse alarm? = False [
+  ifelse alarm? = False
+  [
+
     ask staff-members [move-staff]
     ask visitors [move-visitors]
-  ][
+
+  ]
+
+  [
+
     ask staff-members
-    [evacuate
-     guide-visitors-to-exit
+    [
+      evacuate
+      guide-visitors-to-exit
     ]
-    ask visitors [evacuate]
+    ask visitors
+    [
+      ifelse response-timer = 0
+      [
+        evacuate
+      ]
+      [
+        move-visitors
+        set response-timer response-timer - 1
+      ]
+    ]
   ]
   ask turtles [exit-building]
 
@@ -175,7 +194,7 @@ agents-at-start
 agents-at-start
 50
 5000
-1588.0
+5000.0
 1
 1
 person
@@ -327,7 +346,7 @@ max-turtles-per-patch
 max-turtles-per-patch
 1
 8
-1.0
+2.0
 1
 1
 NIL
@@ -343,6 +362,21 @@ staff-alerting-range
 0
 15
 15.0
+1
+1
+NIL
+HORIZONTAL
+
+SLIDER
+20
+571
+248
+604
+average-response-time
+average-response-time
+0
+120
+50.0
 1
 1
 NIL
