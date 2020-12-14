@@ -95,8 +95,8 @@ GRAPHICS-WINDOW
 255
 0
 270
-0
-0
+1
+1
 1
 ticks
 30.0
@@ -242,7 +242,7 @@ SWITCH
 330
 alarm?
 alarm?
-1
+0
 1
 -1000
 

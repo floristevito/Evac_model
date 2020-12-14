@@ -51,10 +51,28 @@ to determine-closeness-to-main-exit
   ] 
 end
 
+
 to evacuate
-    face min-one-of patches with [pcolor = orange] [distance myself]
+  ifelse any? patches in-radius 5 with [evac-path? = true]
+  [ 
+    face min-one-of patches in-radius 5 [closeness-to-exit]
     fd walking-speed
+  ]
+  [
+    ifelse any? patches in-radius 20 with [evac-path? = true]
+    [ 
+      face min-one-of patches in-radius 20 with [evac-path? = true] [distance myself]
+      fd walking-speed
+    ]
+    [
+      face min-one-of patches with [evac-path? = true] [distance myself]
+      fd walking-speed
+    ]   
+  ]
+  if [pcolor] of patch-here = red
+  [die]
   
-    
 end
-  
+
+
+
