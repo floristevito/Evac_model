@@ -23,3 +23,19 @@ to determine-speeds
   if child? = true [set walking-speed walking-speed * 0.8 set running-speed running-speed * 0.8]
 end
 
+to exit-building
+  if [pcolor] of patch-here = red
+  [die]
+end
+
+to-report people-in-building
+  report count turtles
+end
+
+to-report staff-members-in-building
+  report count staff-members
+end
+
+to-report visitors-in-building
+  report count visitors
+end

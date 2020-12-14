@@ -9,6 +9,7 @@ breed [visitors visitor]
 globals [
   all-colors
   alarm-start-time
+  current-time
 ]
 
 patches-own [
@@ -69,7 +70,7 @@ to go
     ask staff-members [evacuate]
     ask visitors [evacuate]
   ]
-
+  ask turtles [exit-building]
 
   tick ; next time step
 end
@@ -137,9 +138,9 @@ NIL
 
 SWITCH
 12
-122
+208
 133
-155
+241
 verbose?
 verbose?
 0
@@ -148,27 +149,20 @@ verbose?
 
 SWITCH
 12
-161
+247
 122
-194
+280
 debug?
 debug?
 0
 1
 -1000
 
-OUTPUT
-1053
-12
-1664
-188
-12
-
 SLIDER
 18
-238
+324
 199
-271
+357
 agents-at-start
 agents-at-start
 50
@@ -181,9 +175,9 @@ HORIZONTAL
 
 SLIDER
 18
-282
+368
 191
-315
+401
 percentage-female
 percentage-female
 0
@@ -196,9 +190,9 @@ HORIZONTAL
 
 SLIDER
 19
-322
+408
 198
-355
+441
 percentage-children
 percentage-children
 0
@@ -211,9 +205,9 @@ HORIZONTAL
 
 SLIDER
 21
-363
+449
 193
-396
+482
 familiarity
 familiarity
 0
@@ -225,10 +219,10 @@ familiarity
 HORIZONTAL
 
 MONITOR
-1057
-229
-1152
-274
+1059
+299
+1154
+344
 event duration
 event-duration
 17
@@ -236,10 +230,10 @@ event-duration
 11
 
 SWITCH
-1061
-297
-1164
-330
+22
+514
+125
+547
 alarm?
 alarm?
 0
@@ -247,10 +241,10 @@ alarm?
 -1000
 
 BUTTON
-1176
-276
-1324
-309
+11
+99
+159
+132
 hide evacuation path
 hide-evac-path
 NIL
@@ -264,10 +258,10 @@ NIL
 1
 
 BUTTON
-1176
-315
-1330
-348
+11
+138
+165
+171
 show evacuation path
 show-evac-path
 NIL
@@ -296,6 +290,59 @@ NIL
 NIL
 NIL
 1
+
+MONITOR
+1059
+249
+1223
+294
+NIL
+people-in-building
+17
+1
+11
+
+PLOT
+1056
+27
+1491
+244
+people over time
+time
+people
+0.0
+500.0
+0.0
+500.0
+true
+false
+"" ""
+PENS
+"total" 1.0 0 -16777216 true "" "plot people-in-building"
+"staff" 1.0 0 -2674135 true "" "plot staff-members-in-building"
+"visitors" 1.0 0 -13840069 true "" "plot visitors-in-building"
+
+MONITOR
+1227
+249
+1377
+294
+staff members in building
+staff-members-in-building
+17
+1
+11
+
+MONITOR
+1377
+250
+1493
+295
+visistors in building
+visitors-in-building
+17
+1
+11
 
 @#$#@#$#@
 ## WHAT IS IT?

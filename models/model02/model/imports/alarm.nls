@@ -20,7 +20,8 @@ to-report event-duration
     if alarm-start-time = 0 [
       set alarm-start-time ticks
     ]
-    let current-time ticks
+    if count turtles > 0
+    [set current-time ticks]
     report current-time - alarm-start-time
   ][
     set alarm-start-time 0
