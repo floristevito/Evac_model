@@ -53,9 +53,9 @@ end
 
 
 to evacuate
-  ifelse any? patches in-radius 5 with [evac-path? = true]
+  ifelse any? patches in-radius 8 with [evac-path? = true]
   [ 
-    face min-one-of patches in-radius 5 [closeness-to-exit]
+    face min-one-of patches in-radius 8 [closeness-to-exit]
     fd walking-speed
   ]
   [
