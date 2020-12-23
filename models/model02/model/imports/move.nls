@@ -18,6 +18,47 @@ to move-visitors
   fd walking-speed  
 end
 
+to assign-parents
+  ask visitors with [child? = true]
+  [
+    ifelse any? visitors in-radius 10 with [child? = false]
+    [
+    set parent-turtle min-one-of visitors in-radius 10 with [child? = false] [distance myself]
+    set color blue
+    set has-parent? true
+    ask parent-turtle [
+      set walking-speed [walking-speed] of myself ;doesnt work (gets overwritten?)
+      set running-speed [running-speed] of myself ; doesnt work
+      set is-parent? true ;does work
+    ]
+    ]
+    [
+      set has-parent? false
+    ]
+  ]
+
+    
+end
+
+to move-children
+  ifelse has-parent? = true
+  [
+    ifelse is-turtle? parent-turtle 
+    [
+      face parent-turtle
+      ifelse alarm? = true [fd running-speed][fd walking-speed]
+    ]
+    [
+      set knows-all-exits? true
+      evacuate
+    ]
+  ]
+  [
+    ifelse alarm? = true [move-visitors][evacuate]
+  ]
+
+end
+
 to determine-speeds
   ifelse gender = "male" [set walking-speed 0.7 set running-speed 1][set walking-speed 0.6 set running-speed 0.9]
   if child? = true [set walking-speed walking-speed * 0.8 set running-speed running-speed * 0.8]
@@ -40,4 +81,9 @@ end
 
 to-report visitors-in-building
   report count visitors
+end
+
+to walk-bhv-route ;still have to add routes somehow efficiently
+
+  
 end

@@ -22,12 +22,15 @@ patches-own [
 ]
 
 staff-members-own[
-
+  bhv-route?
 ]
 
 visitors-own [
   task
   response-timer
+  parent-turtle
+  has-parent?
+  is-parent?
 ]
 
 turtles-own[
@@ -47,11 +50,28 @@ to setup
     set shape "person"
     set color red
     set size 2
-    ifelse random 101 < percentage-female [set gender "female"][ set gender "male"]
+    set bhv-route? 0
     set knows-all-exits? true
     set child? false
-    move-to one-of patches with [pcolor = white]
+    ifelse random 101 < percentage-female [set gender "female"][ set gender "male"]
   ]
+
+  ask one-of staff-members with [bhv-route? = 0] ;route not yet defined (in move)
+    [
+      set bhv-route? 1
+      move-to patch 44 18
+    ]
+
+  ask one-of staff-members with [bhv-route? = 0] ;route not yet defined (in move)
+  [
+   set bhv-route? 2
+   move-to patch 186 32
+  ]
+
+
+  ask staff-members with [bhv-route? = 0]
+  [move-to one-of patches with [pcolor = white]]
+
   ; create the number of visitors
   create-visitors agents-at-start - 50 [
     set shape "person"
@@ -62,8 +82,10 @@ to setup
     ifelse random 101 < percentage-female [set gender "female"][set gender "male"]
     ifelse random 101 < percentage-children [set child? true][set child? false]
     move-to one-of patches with [pcolor = white]
+
   ]
   ask turtles [determine-speeds]
+  assign-parents
   determine-closeness-to-exit
   determine-closeness-to-main-exit
   reset-ticks
@@ -74,18 +96,15 @@ to go
   [
 
     ask staff-members [move-staff]
-    ask visitors [move-visitors]
-
+    ask visitors with [child? = false] [move-visitors]
   ]
-
   [
-
     ask staff-members
     [
       evacuate
       guide-visitors-to-exit
     ]
-    ask visitors
+    ask visitors with [child? = false]
     [
       ifelse response-timer = 0
       [
@@ -97,19 +116,20 @@ to go
       ]
     ]
   ]
+  ask visitors with [child? = true] [move-children]
   ask turtles [exit-building]
 
   tick ; next time step
 end
 @#$#@#$#@
 GRAPHICS-WINDOW
-433
-21
-1391
-1035
+297
+10
+1036
+792
 -1
 -1
-3.711
+2.8555
 1
 10
 1
@@ -194,7 +214,7 @@ agents-at-start
 agents-at-start
 50
 5000
-5000.0
+211.0
 1
 1
 person
@@ -224,7 +244,7 @@ percentage-children
 percentage-children
 0
 100
-50.0
+37.0
 1
 1
 %
@@ -248,7 +268,7 @@ SWITCH
 323
 alarm?
 alarm?
-0
+1
 1
 -1000
 
@@ -346,7 +366,7 @@ max-turtles-per-patch
 max-turtles-per-patch
 1
 8
-2.0
+1.0
 1
 1
 NIL
