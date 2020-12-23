@@ -27,8 +27,8 @@ to assign-parents
     set color blue
     set has-parent? true
     ask parent-turtle [
-      set walking-speed [walking-speed] of myself ;doesnt work (gets overwritten?)
-      set running-speed [running-speed] of myself ; doesnt work
+      set walking-speed [walking-speed] of myself 
+      set running-speed [running-speed] of myself 
       set is-parent? true ;does work
     ]
     ]
