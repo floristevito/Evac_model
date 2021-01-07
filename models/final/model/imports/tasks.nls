@@ -1,6 +1,6 @@
 to study
   if ([pxcor] of patch-here > 144 or [pxcor] of patch-here < 63) and studying? = false
-  [if random 101 < 2
+  [if random 101 < 5
     [set studying? true
       set timer4 100]]
   

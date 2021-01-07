@@ -10,6 +10,7 @@ globals [
   all-colors
   alarm-start-time
   current-time
+  alarm-timer
 
 ]
 
@@ -51,6 +52,8 @@ turtles-own[
 to setup
   clear-all
   setupMap
+  set alarm? false
+
   ; always create 50 staff members
   create-staff-members 50 [
     set shape "person"
@@ -97,6 +100,7 @@ to setup
 end
 
 to go
+  alarm-start-30
   ifelse alarm? = False
   [;when the alarm is off
 
@@ -113,7 +117,7 @@ to go
   [;when the alarm goes on
     ask staff-members
     [
-      ifelse count visitors in-radius staff-alerting-range > 0 [guide-visitors-to-exit][evacuate]
+      ifelse count visitors in-radius alerting-range > 0 [guide-visitors-to-exit][evacuate]
     ]
     ask visitors with [child? = false]
     [
@@ -121,10 +125,13 @@ to go
       ifelse response-timer = 0
       [
         evacuate
+        if knows-all-exits? = true [guide-visitors-to-exit]
       ]
       [
         ifelse studying? = true or asking-at-desk? = true [][move-visitors]
         set response-timer response-timer - 1
+        if count visitors in-radius alerting-range with [response-timer = 0] > count visitors in-radius alerting-range with [response-timer > 0]
+        [if random 101 < 50 [set response-timer 0]]
       ]
     ]
   ]
@@ -226,7 +233,7 @@ agents-at-start
 agents-at-start
 50
 5000
-447.0
+448.0
 1
 1
 person
@@ -241,7 +248,7 @@ percentage-female
 percentage-female
 0
 100
-50.0
+58.0
 1
 1
 %
@@ -256,7 +263,7 @@ percentage-children
 percentage-children
 0
 100
-13.0
+18.0
 1
 1
 %
@@ -363,7 +370,7 @@ percentage-visitors-go-to-main-door
 percentage-visitors-go-to-main-door
 0
 100
-100.0
+96.0
 1
 1
 NIL
@@ -389,8 +396,8 @@ SLIDER
 373
 239
 406
-staff-alerting-range
-staff-alerting-range
+alerting-range
+alerting-range
 0
 15
 15.0
@@ -423,7 +430,7 @@ percentage-stationary-staff
 percentage-stationary-staff
 0
 100
-100.0
+50.0
 1
 1
 NIL
@@ -775,6 +782,46 @@ NetLogo 6.1.1
 @#$#@#$#@
 @#$#@#$#@
 @#$#@#$#@
+<experiments>
+  <experiment name="experiment" repetitions="1" runMetricsEveryStep="true">
+    <setup>setup</setup>
+    <go>go</go>
+    <metric>count turtles</metric>
+    <enumeratedValueSet variable="percentage-female">
+      <value value="58"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="percentage-stationary-staff">
+      <value value="50"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="percentage-children">
+      <value value="18"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="alarm?">
+      <value value="true"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="max-turtles-per-patch">
+      <value value="1"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="debug?">
+      <value value="true"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="average-response-time">
+      <value value="30"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="agents-at-start">
+      <value value="448"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="staff-alerting-range">
+      <value value="15"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="verbose?">
+      <value value="true"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="percentage-visitors-go-to-main-door">
+      <value value="100"/>
+    </enumeratedValueSet>
+  </experiment>
+</experiments>
 @#$#@#$#@
 @#$#@#$#@
 default

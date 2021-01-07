@@ -105,7 +105,7 @@ to evacuate
 end
 
 to guide-visitors-to-exit 
-  ask visitors in-radius staff-alerting-range
+  ask visitors in-radius alerting-range
   [set knows-all-exits? true
    set response-timer 0]
 end
