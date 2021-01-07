@@ -9,7 +9,6 @@ breed [visitors visitor]
 globals [
   all-colors
   alarm-start-time
-  current-time
   alarm-timer
   total-event-time
   done?
@@ -136,6 +135,7 @@ to go
         [if random 101 < 5 [set response-timer 0]] ;if the majority is evacuating, 50/50 chance you also emmidiately evacuate
       ]
     ]
+    if alarm-start-time = 0 [set alarm-start-time ticks]
   ]
   ask visitors with [child? = true] [move-children]
   ask turtles [exit-building]
@@ -164,8 +164,8 @@ GRAPHICS-WINDOW
 255
 0
 270
-1
-1
+0
+0
 1
 ticks
 30.0
