@@ -11,6 +11,8 @@ globals [
   alarm-start-time
   current-time
   alarm-timer
+  total-event-time
+  done?
 
 ]
 
@@ -131,13 +133,13 @@ to go
         ifelse studying? = true or asking-at-desk? = true [][move-visitors]
         set response-timer response-timer - 1
         if count visitors in-radius alerting-range with [response-timer = 0] > count visitors in-radius alerting-range with [response-timer > 0]
-        [if random 101 <  [set response-timer 0]] ;if the majority is evacuating, 50/50 chance you also emmidiately evacuate
+        [if random 101 < 5 [set response-timer 0]] ;if the majority is evacuating, 50/50 chance you also emmidiately evacuate
       ]
     ]
   ]
   ask visitors with [child? = true] [move-children]
   ask turtles [exit-building]
-
+  if not any? turtles [ stop ]
   tick ; next time step
 end
 @#$#@#$#@
@@ -220,7 +222,7 @@ SWITCH
 133
 debug?
 debug?
-1
+0
 1
 -1000
 
@@ -272,10 +274,10 @@ HORIZONTAL
 MONITOR
 973
 308
-1068
+1097
 353
-event duration
-event-duration
+evacuation duration
+evacuation-duration
 17
 1
 11
@@ -400,7 +402,7 @@ alerting-range
 alerting-range
 0
 10
-10.0
+6.0
 1
 1
 NIL
@@ -435,6 +437,17 @@ percentage-stationary-staff
 1
 NIL
 HORIZONTAL
+
+MONITOR
+974
+364
+1069
+409
+event duration
+event-duration
+17
+1
+11
 
 @#$#@#$#@
 ## WHAT IS IT?

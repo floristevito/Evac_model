@@ -11,6 +11,8 @@ globals [
   alarm-start-time
   current-time
   alarm-timer
+  total-event-time
+  done?
 
 ]
 
@@ -137,7 +139,7 @@ to go
   ]
   ask visitors with [child? = true] [move-children]
   ask turtles [exit-building]
-
+  if not any? turtles [ stop ]
   tick ; next time step
 end
 @#$#@#$#@
@@ -162,8 +164,8 @@ GRAPHICS-WINDOW
 255
 0
 270
-1
-1
+0
+0
 1
 ticks
 30.0
@@ -220,7 +222,7 @@ SWITCH
 133
 debug?
 debug?
-1
+0
 1
 -1000
 
@@ -272,10 +274,10 @@ HORIZONTAL
 MONITOR
 973
 308
-1068
+1097
 353
-event duration
-event-duration
+evacuation duration
+evacuation-duration
 17
 1
 11
@@ -435,6 +437,17 @@ percentage-stationary-staff
 1
 NIL
 HORIZONTAL
+
+MONITOR
+974
+364
+1069
+409
+event duration
+event-duration
+17
+1
+11
 
 @#$#@#$#@
 ## WHAT IS IT?

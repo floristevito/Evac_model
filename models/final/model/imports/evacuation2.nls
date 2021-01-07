@@ -83,9 +83,9 @@ to evacuate
   [
     if any? patches in-radius 2 with [evac-path? = true]
     [ 
-      if min-one-of patches in-radius 2 with [count turtles-here < max-turtles-per-patch and evac-path? = true] [closeness-to-exit] != nobody
+      if min-one-of patches in-radius 2 with [count visitors-here < max-turtles-per-patch and evac-path? = true] [closeness-to-exit] != nobody
       [
-      face min-one-of patches in-radius 2 with [count turtles-here < max-turtles-per-patch and evac-path? = true] [closeness-to-exit]
+      face min-one-of patches in-radius 2 with [count visitors-here < max-turtles-per-patch and evac-path? = true] [closeness-to-exit]
       fd running-speed
       ]
       
@@ -94,9 +94,9 @@ to evacuate
   [
     if any? patches in-radius 2 with [evac-path? = true]
     [
-     if min-one-of patches in-radius 2 with [count turtles-here < max-turtles-per-patch and evac-path? = true] [closeness-to-main-exit] != nobody
+     if min-one-of patches in-radius 2 with [count visitors-here < max-turtles-per-patch and evac-path? = true] [closeness-to-main-exit] != nobody
      [ 
-      face min-one-of patches in-radius 2 with [count turtles-here < max-turtles-per-patch and evac-path? = true] [closeness-to-main-exit]
+      face min-one-of patches in-radius 2 with [count visitors-here < max-turtles-per-patch and evac-path? = true] [closeness-to-main-exit]
       fd running-speed
       ]
     ]

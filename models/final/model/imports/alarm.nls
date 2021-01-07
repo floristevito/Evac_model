@@ -1,22 +1,31 @@
 
 ;reporter that reports the amount of ticks (seconds) the alarm went of
-to-report event-duration
-  ifelse alarm? = True [
+to-report evacuation-duration
+  ifelse alarm? = True 
+  [
     if alarm-start-time = 0 [
       set alarm-start-time ticks
     ]
     if count turtles > 0
     [set current-time ticks]
     report current-time - alarm-start-time
-  ][
+  ]
+  [
     set alarm-start-time 0
     report 0
   ]
 end
 
+to-report event-duration
+  report ticks
+  
+  
+  
+end
+
 to alarm-start-30
   if ticks = 30 [set alarm? true]
-  ;ifelse alarm-timer < 31 [set alarm? true][set alarm-timer alarm-timer + 1]
+  
 end
 
   
