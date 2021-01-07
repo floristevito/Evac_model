@@ -68,6 +68,15 @@ to determine-closeness-to-main-exit
   ask patches [ if any? neighbors with [pcolor = black] [set closeness-to-main-exit closeness-to-main-exit + 1]]
     
 end
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+to determine-response-time
+  if studying? = true [set response-timer random average-response-time * 2 * 1.5]
+  if asking-at-desk? = true [ set response-timer random average-response-time * 2 / 2]
+  if studying? = false and asking-at-desk? = false [set response-timer random average-response-time * 2]
+  set response-time-calculated? true
+
+end
 
 to evacuate
   ifelse knows-all-exits? = true

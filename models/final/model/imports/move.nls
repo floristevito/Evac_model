@@ -29,11 +29,13 @@ to assign-parents
     ask parent-turtle [
       set walking-speed [walking-speed] of myself 
       set running-speed [running-speed] of myself 
-      set is-parent? true ;does work
+      set is-parent? true
     ]
     ]
     [
       set has-parent? false
+      set response-timer random average-response-time * 2
+      set color blue
     ]
   ]
 
@@ -67,8 +69,7 @@ end
 to exit-building
   if [pcolor] of patch-here = red
   [die]
-  ;if any? patches in-radius 1 with [pcolor = red]
-  ;[die]
+  
 end
 
 to-report people-in-building
@@ -84,6 +85,6 @@ to-report visitors-in-building
 end
 
 to walk-bhv-route ;still have to add routes somehow efficiently
-
-  
+;!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+  ;!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 end

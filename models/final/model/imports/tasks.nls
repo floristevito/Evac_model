@@ -1,0 +1,21 @@
+to study
+  if ([pxcor] of patch-here > 144 or [pxcor] of patch-here < 63) and studying? = false
+  [if random 101 < 2
+    [set studying? true
+      set timer4 100]]
+  
+  ifelse timer4 > 0 and studying? = true
+    [set timer4 timer4 - 1]
+    [set studying? false]
+
+end
+
+to ask-at-desk ;moet getriggered worden als ze in radius van een paarse patch zijn
+  if random 101 < 15 and asking-at-desk? = false
+    [set asking-at-desk? true
+      set timer5 20]
+  
+  ifelse timer5 > 0 and asking-at-desk? = true
+    [set timer5 timer5 - 1]
+    [set asking-at-desk? false]
+end
