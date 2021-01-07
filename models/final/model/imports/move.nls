@@ -54,7 +54,7 @@ to move-children
     ]
   ]
   [
-    ifelse alarm? = true [move-visitors][evacuate]
+    ifelse alarm? = true [evacuate][move-visitors]
   ]
 
 end

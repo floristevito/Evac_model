@@ -268,7 +268,7 @@ SWITCH
 323
 alarm?
 alarm?
-1
+0
 1
 -1000
 

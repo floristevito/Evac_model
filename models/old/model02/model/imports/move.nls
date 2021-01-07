@@ -1,0 +1,89 @@
+to move-staff
+  set heading heading - 30 + random 61
+  let dest-patch patch-at-heading-and-distance heading walking-speed
+  while [dest-patch = nobody or [pcolor] of dest-patch = black or [pcolor] of dest-patch = 103.5 or [pcolor] of dest-patch = 125.8 or [pcolor] of dest-patch = 5] [
+    set heading heading - 30 + random 61
+    set dest-patch patch-at-heading-and-distance heading walking-speed 
+  ]
+  fd walking-speed  
+end
+
+to move-visitors
+  set heading heading - 30 + random 61
+  let dest-patch patch-at-heading-and-distance heading walking-speed
+  while [dest-patch = nobody or [pcolor] of dest-patch = black or [pcolor] of dest-patch = 103.5 or [pcolor] of dest-patch = 125.8 or [pcolor] of dest-patch = 5] [
+    set heading heading - 30 + random 61
+    set dest-patch patch-at-heading-and-distance heading walking-speed 
+  ]
+  fd walking-speed  
+end
+
+to assign-parents
+  ask visitors with [child? = true]
+  [
+    ifelse any? visitors in-radius 10 with [child? = false]
+    [
+    set parent-turtle min-one-of visitors in-radius 10 with [child? = false] [distance myself]
+    set color blue
+    set has-parent? true
+    ask parent-turtle [
+      set walking-speed [walking-speed] of myself 
+      set running-speed [running-speed] of myself 
+      set is-parent? true ;does work
+    ]
+    ]
+    [
+      set has-parent? false
+    ]
+  ]
+
+    
+end
+
+to move-children
+  ifelse has-parent? = true
+  [
+    ifelse is-turtle? parent-turtle 
+    [
+      face parent-turtle
+      ifelse alarm? = true [fd running-speed][fd walking-speed]
+    ]
+    [
+      set knows-all-exits? true
+      evacuate
+    ]
+  ]
+  [
+    ifelse alarm? = true [evacuate][move-visitors]
+  ]
+
+end
+
+to determine-speeds
+  ifelse gender = "male" [set walking-speed 0.7 set running-speed 1][set walking-speed 0.6 set running-speed 0.9]
+  if child? = true [set walking-speed walking-speed * 0.8 set running-speed running-speed * 0.8]
+end
+
+to exit-building
+  if [pcolor] of patch-here = red
+  [die]
+  ;if any? patches in-radius 1 with [pcolor = red]
+  ;[die]
+end
+
+to-report people-in-building
+  report count turtles
+end
+
+to-report staff-members-in-building
+  report count staff-members
+end
+
+to-report visitors-in-building
+  report count visitors
+end
+
+to walk-bhv-route ;still have to add routes somehow efficiently
+
+  
+end
