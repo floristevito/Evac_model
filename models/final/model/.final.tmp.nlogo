@@ -131,7 +131,7 @@ to go
         ifelse studying? = true or asking-at-desk? = true [][move-visitors]
         set response-timer response-timer - 1
         if count visitors in-radius alerting-range with [response-timer = 0] > count visitors in-radius alerting-range with [response-timer > 0]
-        [if random 101 < 10 [set response-timer 0]] ;if the majority is evacuating, 50/50 chance you also emmidiately evacuate
+        [if random 101 <  [set response-timer 0]] ;if the majority is evacuating, 50/50 chance you also emmidiately evacuate
       ]
     ]
   ]
@@ -209,7 +209,7 @@ SWITCH
 131
 verbose?
 verbose?
-0
+1
 1
 -1000
 
@@ -220,7 +220,7 @@ SWITCH
 133
 debug?
 debug?
-0
+1
 1
 -1000
 
@@ -233,7 +233,7 @@ agents-at-start
 agents-at-start
 50
 5000
-448.0
+453.0
 1
 1
 person
@@ -248,7 +248,7 @@ percentage-female
 percentage-female
 0
 100
-58.0
+11.0
 1
 1
 %
@@ -400,7 +400,7 @@ alerting-range
 alerting-range
 0
 10
-6.0
+10.0
 1
 1
 NIL
