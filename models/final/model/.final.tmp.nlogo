@@ -12,6 +12,8 @@ globals [
   alarm-timer
   total-event-time
   done?
+  total-response-delay
+  evacuating-visitors
 
 ]
 
@@ -37,6 +39,7 @@ visitors-own [
   studying?
   asking-at-desk?
   response-time-calculated?
+  evacuating?
   timer4
   timer5
 ]
@@ -87,6 +90,7 @@ to setup
     set studying? false
     set asking-at-desk? false
     set response-time-calculated? false
+    set evacuating? false
     ifelse random 101 > percentage-visitors-go-to-main-door [set knows-all-exits? true][set knows-all-exits? false]
     ifelse random 101 < percentage-female [set gender "female"][set gender "male"]
     ifelse random 101 < percentage-children [set child? true][set child? false]
@@ -105,7 +109,11 @@ to go
   ifelse alarm? = False
   [;when the alarm is off
 
-    ask staff-members with [stationary-duty? = false] [move-staff]
+    ask staff-members with [stationary-duty? = false]
+    [
+      move-staff
+    ]
+
     ask visitors with [child? = false]
     [
 
@@ -113,6 +121,9 @@ to go
       study
       if studying? = false and asking-at-desk? = false [move-visitors]
     ]
+
+    ask visitors with [child? = true]
+    [move-children]
   ]
 
   [;when the alarm goes on
@@ -120,11 +131,14 @@ to go
     [
       ifelse count visitors in-radius alerting-range > 0 [guide-visitors-to-exit][evacuate]
     ]
+
+
     ask visitors with [child? = false]
     [
       if response-time-calculated? = false [determine-response-time]
       ifelse response-timer = 0
       [
+        set evacuating? true
         evacuate
         if knows-all-exits? = true [guide-visitors-to-exit]
       ]
@@ -132,16 +146,46 @@ to go
         ifelse studying? = true or asking-at-desk? = true [][move-visitors]
         set response-timer response-timer - 1
         if count visitors in-radius alerting-range with [response-timer = 0] > count visitors in-radius alerting-range with [response-timer > 0]
-        [if random 101 < 5 [set response-timer 0]] ;if the majority is evacuating, 50/50 chance you also emmidiately evacuate
+        [if random 101 < 10 [set response-timer 0]] ;if the majority is evacuating, 10% chance you also emmidiately evacuate
       ]
     ]
     if alarm-start-time = 0 [set alarm-start-time ticks]
+
+
+
+  ask visitors with [child? = true and has-parent? = true]
+  [move-children
+    if is-turtle? parent-turtle = true
+    [if [response-timer] of parent-turtle = 0
+        [set evacuating? true]] ;only triggers when their parent starts evacuating
   ]
-  ask visitors with [child? = true] [move-children]
+
+
+  ask visitors with [child? = true and has-parent? = false]
+    [
+      ifelse response-timer = 0
+      [
+        set evacuating? true
+        evacuate
+      ]
+      [
+        move-children
+        set response-timer response-timer - 1
+        if count visitors in-radius alerting-range with [response-timer = 0] > count visitors in-radius alerting-range with [response-timer > 0]
+        [if random 101 < 10 [set response-timer 0]] ;if the majority is evacuating, 10% chance you also emmidiately evacuate
+      ]
+  ]
+  ]
+
+
+
+
   ask turtles [exit-building]
   if not any? turtles [ stop ]
   tick ; next time step
 end
+
+
 @#$#@#$#@
 GRAPHICS-WINDOW
 297
@@ -164,8 +208,8 @@ GRAPHICS-WINDOW
 255
 0
 270
-0
-0
+1
+1
 1
 ticks
 30.0
@@ -235,7 +279,7 @@ agents-at-start
 agents-at-start
 50
 5000
-453.0
+450.0
 1
 1
 person
@@ -250,7 +294,7 @@ percentage-female
 percentage-female
 0
 100
-11.0
+37.0
 1
 1
 %
@@ -265,7 +309,7 @@ percentage-children
 percentage-children
 0
 100
-18.0
+8.0
 1
 1
 %
@@ -289,7 +333,7 @@ SWITCH
 171
 alarm?
 alarm?
-0
+1
 1
 -1000
 
@@ -387,7 +431,7 @@ max-turtles-per-patch
 max-turtles-per-patch
 1
 8
-1.0
+6.0
 1
 1
 NIL
@@ -417,7 +461,7 @@ average-response-time
 average-response-time
 0
 120
-30.0
+60.0
 1
 1
 NIL
@@ -445,6 +489,17 @@ MONITOR
 409
 event duration
 event-duration
+17
+1
+11
+
+MONITOR
+974
+429
+1232
+474
+percentage visitors currently not evacuating
+precision ((count visitors with [evacuating? = false] /\ncount visitors) * 100) 4
 17
 1
 11
@@ -796,21 +851,22 @@ NetLogo 6.1.1
 @#$#@#$#@
 @#$#@#$#@
 <experiments>
-  <experiment name="experiment" repetitions="1" runMetricsEveryStep="true">
+  <experiment name="experiment 1" repetitions="10" runMetricsEveryStep="true">
     <setup>setup</setup>
     <go>go</go>
-    <metric>count turtles</metric>
+    <metric>evacuation-duration</metric>
+    <metric>event-duration</metric>
     <enumeratedValueSet variable="percentage-female">
-      <value value="58"/>
+      <value value="37"/>
     </enumeratedValueSet>
     <enumeratedValueSet variable="percentage-stationary-staff">
       <value value="50"/>
     </enumeratedValueSet>
-    <enumeratedValueSet variable="percentage-children">
-      <value value="18"/>
-    </enumeratedValueSet>
     <enumeratedValueSet variable="alarm?">
       <value value="true"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="percentage-children">
+      <value value="5"/>
     </enumeratedValueSet>
     <enumeratedValueSet variable="max-turtles-per-patch">
       <value value="1"/>
@@ -819,19 +875,19 @@ NetLogo 6.1.1
       <value value="true"/>
     </enumeratedValueSet>
     <enumeratedValueSet variable="average-response-time">
-      <value value="30"/>
+      <value value="60"/>
     </enumeratedValueSet>
     <enumeratedValueSet variable="agents-at-start">
-      <value value="448"/>
-    </enumeratedValueSet>
-    <enumeratedValueSet variable="staff-alerting-range">
-      <value value="15"/>
+      <value value="450"/>
     </enumeratedValueSet>
     <enumeratedValueSet variable="verbose?">
-      <value value="true"/>
+      <value value="false"/>
     </enumeratedValueSet>
     <enumeratedValueSet variable="percentage-visitors-go-to-main-door">
-      <value value="100"/>
+      <value value="96"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="alerting-range">
+      <value value="6"/>
     </enumeratedValueSet>
   </experiment>
 </experiments>

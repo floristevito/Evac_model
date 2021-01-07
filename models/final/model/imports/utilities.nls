@@ -7,6 +7,17 @@ to-report sort-with [ key lst ]
   report sort-by [ [a b] -> (runresult key a) < (runresult key b) ] lst
 end
 
+to-report people-in-building
+  report count turtles
+end
+
+to-report staff-members-in-building
+  report count staff-members
+end
+
+to-report visitors-in-building
+  report count visitors
+end
 
 ; Warnings can not be supressed, and are presented in the output window.
 ; Useful for things the use must know, such as conditions that should never occur, etc.

@@ -56,7 +56,7 @@ to move-children
     ]
   ]
   [
-    ifelse alarm? = true [evacuate][move-visitors]
+    move-visitors
   ]
 
 end
@@ -72,19 +72,5 @@ to exit-building
   
 end
 
-to-report people-in-building
-  report count turtles
-end
 
-to-report staff-members-in-building
-  report count staff-members
-end
 
-to-report visitors-in-building
-  report count visitors
-end
-
-to walk-bhv-route ;still have to add routes somehow efficiently
-;!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-  ;!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-end
