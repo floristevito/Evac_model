@@ -131,7 +131,7 @@ to go
         ifelse studying? = true or asking-at-desk? = true [][move-visitors]
         set response-timer response-timer - 1
         if count visitors in-radius alerting-range with [response-timer = 0] > count visitors in-radius alerting-range with [response-timer > 0]
-        [if random 101 < 50 [set response-timer 0]] ;if the majority is evacuating
+        [if random 101 < 10 [set response-timer 0]] ;if the majority is evacuating, 50/50 chance you also emmidiately evacuate
       ]
     ]
   ]
@@ -209,7 +209,7 @@ SWITCH
 131
 verbose?
 verbose?
-0
+1
 1
 -1000
 
@@ -220,7 +220,7 @@ SWITCH
 133
 debug?
 debug?
-0
+1
 1
 -1000
 
@@ -248,7 +248,7 @@ percentage-female
 percentage-female
 0
 100
-58.0
+62.0
 1
 1
 %
@@ -270,10 +270,10 @@ percentage-children
 HORIZONTAL
 
 MONITOR
-1398
-293
-1493
-338
+973
+308
+1068
+353
 event duration
 event-duration
 17
@@ -309,10 +309,10 @@ NIL
 1
 
 MONITOR
-1398
-243
-1562
-288
+973
+258
+1137
+303
 NIL
 people-in-building
 17
@@ -320,10 +320,10 @@ people-in-building
 11
 
 PLOT
-1395
-21
-1830
-238
+970
+36
+1405
+253
 people over time
 time
 people
@@ -399,8 +399,8 @@ SLIDER
 alerting-range
 alerting-range
 0
-15
-15.0
+10
+10.0
 1
 1
 NIL
