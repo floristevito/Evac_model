@@ -185,7 +185,6 @@ to go
   tick ; next time step
 end
 
-
 @#$#@#$#@
 GRAPHICS-WINDOW
 297
@@ -333,7 +332,7 @@ SWITCH
 171
 alarm?
 alarm?
-1
+0
 1
 -1000
 
@@ -386,10 +385,10 @@ PENS
 "visitors" 1.0 0 -13840069 true "" "plot visitors-in-building"
 
 MONITOR
-1566
-243
-1716
-288
+1141
+258
+1291
+303
 staff members in building
 staff-members-in-building
 17
@@ -397,10 +396,10 @@ staff-members-in-building
 11
 
 MONITOR
-1716
-244
-1832
-289
+1291
+259
+1407
+304
 visistors in building
 visitors-in-building
 17
@@ -499,7 +498,7 @@ MONITOR
 1232
 474
 percentage visitors currently not evacuating
-precision ((count visitors with [evacuating? = false] /\ncount visitors) * 100) 4
+precision ((count visitors with [evacuating? = false] /\ncount visitors) * 100) 2
 17
 1
 11
@@ -851,25 +850,32 @@ NetLogo 6.1.1
 @#$#@#$#@
 @#$#@#$#@
 <experiments>
-  <experiment name="experiment 1" repetitions="10" runMetricsEveryStep="true">
+  <experiment name="experiment" repetitions="20" runMetricsEveryStep="true">
     <setup>setup</setup>
     <go>go</go>
+    <metric>precision ((count visitors with [evacuating? = false] / count visitors) * 100) 2</metric>
+    <metric>people-in-building</metric>
     <metric>evacuation-duration</metric>
     <metric>event-duration</metric>
+    <metric>staff-members-in-building</metric>
+    <metric>visitors-in-building</metric>
+    <metric>people-in-building</metric>
+    <metric>staff-members-in-building</metric>
+    <metric>visitors-in-building</metric>
     <enumeratedValueSet variable="percentage-female">
       <value value="37"/>
     </enumeratedValueSet>
     <enumeratedValueSet variable="percentage-stationary-staff">
       <value value="50"/>
     </enumeratedValueSet>
+    <enumeratedValueSet variable="percentage-children">
+      <value value="8"/>
+    </enumeratedValueSet>
     <enumeratedValueSet variable="alarm?">
       <value value="true"/>
     </enumeratedValueSet>
-    <enumeratedValueSet variable="percentage-children">
-      <value value="5"/>
-    </enumeratedValueSet>
     <enumeratedValueSet variable="max-turtles-per-patch">
-      <value value="1"/>
+      <value value="6"/>
     </enumeratedValueSet>
     <enumeratedValueSet variable="debug?">
       <value value="true"/>
@@ -884,7 +890,15 @@ NetLogo 6.1.1
       <value value="false"/>
     </enumeratedValueSet>
     <enumeratedValueSet variable="percentage-visitors-go-to-main-door">
-      <value value="96"/>
+      <value value="0"/>
+      <value value="5"/>
+      <value value="10"/>
+      <value value="25"/>
+      <value value="50"/>
+      <value value="75"/>
+      <value value="90"/>
+      <value value="95"/>
+      <value value="100"/>
     </enumeratedValueSet>
     <enumeratedValueSet variable="alerting-range">
       <value value="6"/>
