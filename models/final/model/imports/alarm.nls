@@ -1,6 +1,4 @@
-
-;reporter that reports the amount of ticks (seconds) the alarm went of
-to-report evacuation-duration
+to-report evacuation-duration                                          ;reporter that reports the amount of ticks (seconds) the alarm went of
   ifelse alarm? = True 
   [ report ticks - alarm-start-time
   ]
@@ -9,16 +7,12 @@ to-report evacuation-duration
   ]
 end
 
-to-report event-duration
+to-report event-duration                                               ;reports total duration of the simulation run
   report ticks 
-  
-  
-  
 end
 
-to alarm-start-30
+to alarm-start-30                                                      ;timer that automatically starts the alarm at t = 30
   if ticks = 30 [set alarm? true]
-  
 end
 
   

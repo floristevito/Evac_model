@@ -1,4 +1,29 @@
 ; imports
+
+;Imports are used to make the entire more overseeable
+;The imported files contain the functions for the following procedures:
+;
+; utilities:  -general setup tools like debug?
+;             -measuring turtles as a stop condition
+;             -reassigning the colors to ensure that no patches with the same color have slightly matching color codes
+;
+; alarm:      -timer to start the alarm at t = 30
+;             -measuring statistics for the evacuation duration
+;
+; move:       -general move function for when alarm is off, focussed on movement and not walking through walls
+;             -adapted move function for children. Children with parents follow parents regardless of the alarm
+;             -assignment of children to parents to aid in child move function
+;
+; evacuation: -pathfinding functions based on assigning a "closeness-to-exit" value to each walkable patch in the building.
+;              turtles will navigate to the door by heading towards patches with a lower closeness-to-exit.
+;             -similar pathfinding function for assigning a "closeness-to-main-exit" value to each walkable patch in the building.
+;              Turtles that will head to the main entrance instead of the closest exit will follow patches with a lower "closeness-to-main-exit".
+;             -determination of initial response time when the alarm goes on (based on current task)
+;             -move function for turtles when the alarm goes on
+;             -evacuation aid function for staff members to guide others to the closest exit
+;
+; tasks:      -functions to determine when a turtle will start studying or asking something at the desk
+
 __includes [ "imports/utilities.nls" "imports/alarm.nls" "imports/move.nls" "imports/evacuation2.nls" "imports/tasks.nls"]
 
 ; the two main type of building users
@@ -18,8 +43,8 @@ globals [
 ]
 
 patches-own [
-  cyan?
-  white?
+  cyan?                       ; colors are saved initially in these variables before the pathfinding function
+  white?                      ; temporarily overwrites them
   green?
   evac-path?
   closeness-to-exit
@@ -27,7 +52,7 @@ patches-own [
 ]
 
 staff-members-own[
-  stationary-duty?
+  stationary-duty?            ; staff members with stationary duty have tasks requiring no movement, like standing by at an information desk
 ]
 
 visitors-own [
@@ -53,22 +78,23 @@ turtles-own[
 ]
 
 ; we assume that 1 patch = 1.5 x 1.5 m
+
 to setup
   clear-all
-  setupMap
-  set alarm? false
+  setupMap               ;import the map png
+  set alarm? false       ;at the start the alarm is turned off
 
   ; always create 50 staff members
   create-staff-members 50 [
     set shape "person"
     set color red
     set size 2
-
     set knows-all-exits? true
     set child? false
     ifelse random 101 < percentage-female [set gender "female"][ set gender "male"]
     ifelse random 101 < percentage-stationary-staff
-    [move-to one-of patches with [pcolor = 25.7]
+    [move-to one-of patches with [pcolor = 25.7]                     ;the map was edited with specific locations where stationary staff members will stand
+                                                                     ;these patches are changed to white later in the setup
     set stationary-duty? true]
     [move-to one-of patches with [pcolor = white]
     set stationary-duty? false]
@@ -76,12 +102,9 @@ to setup
 
   ask patches with [pcolor = 25.7]
   [
-    set pcolor white
-    set white? true
-  ] ;the patches with 25.7 as color were only necessary to
-                                                      ;indicate spawn locations for stationary staff
-
-
+    set pcolor white                                                  ;the patches with 25.7 as color were only necessary to
+    set white? true                                                   ;indicate spawn locations for stationary staff
+  ]
   ; create the number of visitors
   create-visitors agents-at-start - 50 [
     set shape "person"
@@ -107,84 +130,75 @@ end
 to go
   alarm-start-30
   ifelse alarm? = False
-  [;when the alarm is off
+  [                                                                     ;when the alarm is off
 
     ask staff-members with [stationary-duty? = false]
     [
-      move-staff
+      move-turtles                                                      ;non-stationary staff members traverse the building normally
     ]
 
     ask visitors with [child? = false]
     [
 
-      if any? patches in-radius 2 with [pcolor = 125.8] [ask-at-desk]
-      study
-      if studying? = false and asking-at-desk? = false [move-visitors]
+      if any? patches in-radius 2 with [pcolor = 125.8] [ask-at-desk]   ;when close to a desk patch, there is a chance a visitor will ask a question
+      study                                                             ;in certain parts of the building, there is a chance a visitor will sit down and study
+      if studying? = false and asking-at-desk? = false [move-turtles]   ;when turtles are not studying or asking at a desk, they will move normally
     ]
 
     ask visitors with [child? = true]
-    [move-children]
+    [
+      move-children                                                     ;children move depending on if they have a parent:
+                                                                        ;if they have a parent, they will follow the parent around the building
+                                                                        ;if they do not have a parent, they will move as normal turtles
+    ]
   ]
 
-  [;when the alarm goes on
+  [                                                                     ;when the alarm goes on
     ask staff-members
     [
       ifelse count visitors in-radius alerting-range > 0 [guide-visitors-to-exit][evacuate]
+                                                                        ;when the alarm goes on, staff members will head to the nearest exit.
+                                                                        ;however, as soon as a visitors enters their alerting range, they will
+                                                                        ;stop, alert visitors of the danger and show them the route to nearest exit
     ]
 
 
-    ask visitors with [child? = false]
+    ask visitors with [(child? = false) or (child? = true and has-parent? = false)]
     [
-      if response-time-calculated? = false [determine-response-time]
-      ifelse response-timer = 0
-      [
-        set evacuating? true
-        evacuate
-        if knows-all-exits? = true [guide-visitors-to-exit]
+      if response-time-calculated? = false [determine-response-time]   ;based on the task the visitor is doing when the alarm goes on, initial response
+                                                                       ;time is determined
+
+      ifelse response-timer = 0                                        ;when a turtle's response time runs out, they will evacuate.
+                                                                       ;as long as the response time is not 0, visitors will continue the task they were doing.
+      [                                                                ;visitors who've had fire training and know the exits will also alert others of the danger
+        set evacuating? true                                           ;and point them to the nearest exit.
+        evacuate                                                       ;however they will not stop running to the exit to alert others, like staff members do
+        if knows-all-exits? = true and child? = false [guide-visitors-to-exit]
       ]
       [
-        ifelse studying? = true or asking-at-desk? = true [][move-visitors]
+        ifelse studying? = true or asking-at-desk? = true [][move-turtles]
         set response-timer response-timer - 1
         if count visitors in-radius alerting-range with [response-timer = 0] > count visitors in-radius alerting-range with [response-timer > 0]
-        [if random 101 < 10 [set response-timer 0]] ;if the majority is evacuating, 10% chance you also emmidiately evacuate
-      ]
-    ]
+        [if random 101 < 10 [set response-timer 0]]                    ;when the alarm goes on, visitors also examine each others behaviour to decide what to do
+      ]                                                                ;if the majority is evacuating around a visitor, there is a 10% chance a visitor's
+    ]                                                                  ;response timer is reduced to 0 and they will consequently evacuate
     if alarm-start-time = 0 [set alarm-start-time ticks]
 
 
 
-  ask visitors with [child? = true and has-parent? = true]
+  ask visitors with [child? = true and has-parent? = true]             ;children with parents will not start evacuating until their parents do too
   [move-children
     if is-turtle? parent-turtle = true
     [if [response-timer] of parent-turtle = 0
-        [set evacuating? true]] ;only triggers when their parent starts evacuating
+        [set evacuating? true]]
   ]
 
-
-  ask visitors with [child? = true and has-parent? = false]
-    [
-      ifelse response-timer = 0
-      [
-        set evacuating? true
-        evacuate
-      ]
-      [
-        move-children
-        set response-timer response-timer - 1
-        if count visitors in-radius alerting-range with [response-timer = 0] > count visitors in-radius alerting-range with [response-timer > 0]
-        [if random 101 < 10 [set response-timer 0]] ;if the majority is evacuating, 10% chance you also emmidiately evacuate
-      ]
-  ]
-  ]
-
-
-
-
-  ask turtles [exit-building]
-  if not any? turtles [ stop ]
+ ]
+  ask turtles [exit-building]                                         ;turtles on a red square exit the building
+                                                                      ;it is possible that this happens before the alarm goes on, since the doors aren't locked.
+  if not any? turtles [ stop ]                                        ;model ends when no more turtles are in the building
   tick ; next time step
 end
-
 
 @#$#@#$#@
 GRAPHICS-WINDOW
@@ -279,7 +293,7 @@ agents-at-start
 agents-at-start
 50
 5000
-450.0
+517.0
 1
 1
 person
@@ -309,7 +323,7 @@ percentage-children
 percentage-children
 0
 100
-8.0
+19.0
 1
 1
 %
@@ -431,7 +445,7 @@ max-turtles-per-patch
 max-turtles-per-patch
 1
 8
-6.0
+1.0
 1
 1
 NIL

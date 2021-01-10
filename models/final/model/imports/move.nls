@@ -1,6 +1,12 @@
-to move-staff
-  set heading heading - 30 + random 61
-  let dest-patch patch-at-heading-and-distance heading walking-speed
+to determine-speeds                                                   ;movement speed is based on age and gender
+  
+  ifelse gender = "male" [set walking-speed 0.7 set running-speed 1][set walking-speed 0.6 set running-speed 0.9]
+  if child? = true [set walking-speed walking-speed * 0.8 set running-speed running-speed * 0.8]
+end
+
+to move-turtles
+  set heading heading - 30 + random 61                                 ;the turtle sets a heading and looks ahead at the patch it's heading towards.
+  let dest-patch patch-at-heading-and-distance heading walking-speed   ;while the patch at the heading is a wall, it will pick a new heading
   while [dest-patch = nobody or [pcolor] of dest-patch = black or [pcolor] of dest-patch = 103.5 or [pcolor] of dest-patch = 125.8 or [pcolor] of dest-patch = 5] [
     set heading heading - 30 + random 61
     set dest-patch patch-at-heading-and-distance heading walking-speed 
@@ -8,20 +14,12 @@ to move-staff
   fd walking-speed  
 end
 
-to move-visitors
-  set heading heading - 30 + random 61
-  let dest-patch patch-at-heading-and-distance heading walking-speed
-  while [dest-patch = nobody or [pcolor] of dest-patch = black or [pcolor] of dest-patch = 103.5 or [pcolor] of dest-patch = 125.8 or [pcolor] of dest-patch = 5] [
-    set heading heading - 30 + random 61
-    set dest-patch patch-at-heading-and-distance heading walking-speed 
-  ]
-  fd walking-speed  
-end
 
-to assign-parents
-  ask visitors with [child? = true]
-  [
-    ifelse any? visitors in-radius 10 with [child? = false]
+                                                                       ;children are colored blue
+to assign-parents                                                      ;children are assigned a parent turtle by randomly choosing a non-child turtle in a radius of 10.
+  ask visitors with [child? = true]                                    ;the parent turtle's movement speed is reduced so that their child can keep up.
+  [                                                                    ;If there are no turtles around the child to be a parent, the child will not have a parent
+    ifelse any? visitors in-radius 10 with [child? = false]            ;and behave like a normal visitor
     [
     set parent-turtle min-one-of visitors in-radius 10 with [child? = false] [distance myself]
     set color blue
@@ -30,21 +28,18 @@ to assign-parents
       set walking-speed [walking-speed] of myself 
       set running-speed [running-speed] of myself 
       set is-parent? true
-    ]
-    ]
+    ]]
     [
       set has-parent? false
       set response-timer random average-response-time * 2
       set color blue
     ]
-  ]
-
-    
+  ]  
 end
 
-to move-children
-  ifelse has-parent? = true
-  [
+to move-children                                                       ;children with parents always follow their parents
+  ifelse has-parent? = true                                            ;a parent can only "die" by leaving the building via an exit
+  [                                                                    ;the child will then also leave the building 
     ifelse is-turtle? parent-turtle 
     [
       face parent-turtle
@@ -56,20 +51,16 @@ to move-children
     ]
   ]
   [
-    move-visitors
+    move-turtles
   ]
 
 end
 
-to determine-speeds
-  ifelse gender = "male" [set walking-speed 0.7 set running-speed 1][set walking-speed 0.6 set running-speed 0.9]
-  if child? = true [set walking-speed walking-speed * 0.8 set running-speed running-speed * 0.8]
-end
+
 
 to exit-building
   if [pcolor] of patch-here = red
   [die]
-  
 end
 
 
