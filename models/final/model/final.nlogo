@@ -39,6 +39,8 @@ globals [
   done?
   total-response-delay
   evacuating-visitors
+  preferred-door-Xcor
+  preferred-door-Ycor
 
 ]
 
@@ -48,7 +50,8 @@ patches-own [
   green?
   evac-path?
   closeness-to-exit
-  closeness-to-main-exit
+  closeness-to-preferred-exit
+  preferred-exit?
 ]
 
 staff-members-own[
@@ -114,7 +117,7 @@ to setup
     set asking-at-desk? false
     set response-time-calculated? false
     set evacuating? false
-    ifelse random 101 > percentage-visitors-go-to-main-door [set knows-all-exits? true][set knows-all-exits? false]
+    ifelse random 101 < percentage-visitors-go-to-preferred-exit [set knows-all-exits? false][set knows-all-exits? true]
     ifelse random 101 < percentage-female [set gender "female"][set gender "male"]
     ifelse random 101 < percentage-children [set child? true][set child? false]
     move-to one-of patches with [pcolor = white]
@@ -122,8 +125,9 @@ to setup
   ]
   ask turtles [determine-speeds]
   assign-parents
+  set-preferred-exit-door
   determine-closeness-to-exit
-  determine-closeness-to-main-exit
+  determine-closeness-to-preferred-exit
   reset-ticks
 end
 
@@ -199,7 +203,6 @@ to go
   if not any? turtles [ stop ]                                        ;model ends when no more turtles are in the building
   tick ; next time step
 end
-
 @#$#@#$#@
 GRAPHICS-WINDOW
 297
@@ -263,10 +266,10 @@ NIL
 1
 
 SWITCH
-9
-98
-130
-131
+6
+89
+127
+122
 verbose?
 verbose?
 1
@@ -274,13 +277,13 @@ verbose?
 -1000
 
 SWITCH
-134
-100
-244
-133
+147
+90
+257
+123
 debug?
 debug?
-0
+1
 1
 -1000
 
@@ -293,7 +296,7 @@ agents-at-start
 agents-at-start
 50
 5000
-517.0
+2713.0
 1
 1
 person
@@ -308,7 +311,7 @@ percentage-female
 percentage-female
 0
 100
-37.0
+100.0
 1
 1
 %
@@ -323,7 +326,7 @@ percentage-children
 percentage-children
 0
 100
-19.0
+8.0
 1
 1
 %
@@ -424,13 +427,13 @@ visitors-in-building
 SLIDER
 9
 294
-238
+283
 327
-percentage-visitors-go-to-main-door
-percentage-visitors-go-to-main-door
+percentage-visitors-go-to-preferred-exit
+percentage-visitors-go-to-preferred-exit
 0
 100
-96.0
+100.0
 1
 1
 NIL
@@ -460,7 +463,7 @@ alerting-range
 alerting-range
 0
 10
-6.0
+2.0
 1
 1
 NIL
@@ -517,6 +520,16 @@ precision ((count visitors with [evacuating? = false] /\ncount visitors) * 100) 
 17
 1
 11
+
+CHOOSER
+132
+130
+270
+175
+Preferred-exit-door
+Preferred-exit-door
+"main" "lower-left" "upper-right"
+2
 
 @#$#@#$#@
 ## WHAT IS IT?
@@ -870,18 +883,18 @@ NetLogo 6.1.1
     <go>go</go>
     <metric>evacuation-duration</metric>
     <metric>event-duration</metric>
-    <enumeratedValueSet variable="percentage-female">
-      <value value="37"/>
-    </enumeratedValueSet>
+    <metric>people-in-building</metric>
+    <metric>staff-members-in-building</metric>
+    <metric>visitors-in-building</metric>
+    <metric>precision ((count visitors with [evacuating? = false] / count visitors) * 100) 2</metric>
+    <steppedValueSet variable="percentage-female" first="0" step="10" last="100"/>
     <enumeratedValueSet variable="percentage-stationary-staff">
       <value value="50"/>
     </enumeratedValueSet>
     <enumeratedValueSet variable="alarm?">
       <value value="true"/>
     </enumeratedValueSet>
-    <enumeratedValueSet variable="percentage-children">
-      <value value="5"/>
-    </enumeratedValueSet>
+    <steppedValueSet variable="percentage-children" first="0" step="10" last="100"/>
     <enumeratedValueSet variable="max-turtles-per-patch">
       <value value="1"/>
     </enumeratedValueSet>
