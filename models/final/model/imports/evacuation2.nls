@@ -1,13 +1,13 @@
-to determine-closeness-to-exit ;for all patches with pcolor = red and pcolor one-of neighbours8 = orange
+to determine-closeness-to-exit 
   ask patches with [pcolor != white and pcolor != cyan and pcolor != green and pcolor != red]
   [set closeness-to-exit 6000
-   set evac-path? false]
-  ask patches with [pcolor = red]
-  [
-    set evac-path? true
-    set closeness-to-exit 0
+   set evac-path? false]                                                  ;Pathfinding during evacuation is done with closeness-to-exit values on every patch.
+  ask patches with [pcolor = red]                                         ;Each patch is assigned a closeness-to-exit value, based on its distance from the closest exit.
+  [                                                                       ;Non-traversable patches (like walls) are assigned a value of 6000 (higher than all others),
+    set evac-path? true                                                   ;preventing turtles from walking to them.
+    set closeness-to-exit 0                                               ;The function starts value assignment at each door and then iteratively covers the whole map.
     ask neighbors with [pcolor = white or pcolor = cyan]
-    [set closeness-to-exit 1
+    [set closeness-to-exit 1                                              ;You can see the function in action by viewing updates on ticks, slower, when pressing setup 
      set evac-path? true
      set pcolor 23
     ]
@@ -34,9 +34,10 @@ to determine-closeness-to-exit ;for all patches with pcolor = red and pcolor one
 end
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-to determine-closeness-to-preferred-exit
-  ask patches [set preferred-exit? false]
+                                                                        
+to determine-closeness-to-preferred-exit                                ;Functions the same as determine-closeness-to-exit, but this function only starts the iterative process
+  ask patches [set preferred-exit? false]                               ;from one selected preferred exit door
+                                                                        ;You can see the function in action by viewing updates on ticks, slower, when pressing setup 
   ask patches with [pcolor != white and pcolor != cyan and pcolor != green and pcolor != red]
   [set closeness-to-preferred-exit 6000
    set evac-path? false]
@@ -76,8 +77,8 @@ to determine-closeness-to-preferred-exit
     
 end
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-to set-preferred-exit-door
+                                                                        
+to set-preferred-exit-door                                              
   if Preferred-exit-door = "main" 
   [
       set preferred-door-Xcor 115
@@ -96,9 +97,9 @@ to set-preferred-exit-door
       set preferred-door-Ycor 170
   ]
 end
-
-
-to determine-response-time
+                                                                        
+                                                                        ;This function sets the initial response time before visitors evacuate
+to determine-response-time                                              ;Response time is based on the visitor's task when the alarm goes on
   if studying? = true [set response-timer random average-response-time * 2 * 1.5]
   if asking-at-desk? = true [ set response-timer random average-response-time * 2 / 2]
   if studying? = false and asking-at-desk? = false [set response-timer random average-response-time * 2]
@@ -106,11 +107,11 @@ to determine-response-time
 
 end
 
-to evacuate
-  ifelse knows-all-exits? = true
-  [
-    if any? patches in-radius 2 with [evac-path? = true]
-    [ 
+to evacuate                                                             ;Visitors who know all exits will head to the nearest exit
+  ifelse knows-all-exits? = true                                        ;otherwise they will head to the preferred exit
+  [                                                                     ;Visitors evacuate by heading towards the patch with the lowest closeness-to-exit (or preferred-exit)
+    if any? patches in-radius 2 with [evac-path? = true]                ;in radius 2. However they can only move there if it is not too busy on the patch (parameter)
+    [                                                                   ;Exits have closeness value 0
       if min-one-of patches in-radius 2 with [count visitors-here < max-turtles-per-patch and evac-path? = true] [closeness-to-exit] != nobody
       [
       face min-one-of patches in-radius 2 with [count visitors-here < max-turtles-per-patch and evac-path? = true] [closeness-to-exit]
@@ -131,11 +132,11 @@ to evacuate
   ]
    
 end
-
-to guide-visitors-to-exit 
-  ask visitors in-radius alerting-range
-  [set knows-all-exits? true
-   set response-timer 0]
+                                                                        
+to guide-visitors-to-exit                                               ;Staff-members and Visitors with fire training can alert others and show where the nearest exit is
+  ask visitors in-radius alerting-range                                 ;Remaining response time is set to 0
+  [set knows-all-exits? true                                            ;Alerted visitors will head to the nearest exit
+   set response-timer 0]                                                ;Done per tick in range "alerting-range"
 end
 
 

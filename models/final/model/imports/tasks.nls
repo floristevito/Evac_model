@@ -1,19 +1,19 @@
 to study
   if ([pxcor] of patch-here > 144 or [pxcor] of patch-here < 63) and studying? = false
-  [if random 101 < 5
-    [set studying? true
-      set timer4 100]]
-  
-  ifelse timer4 > 0 and studying? = true
+  [if random 101 < 5                                                   ;The library is split into thirds vertically
+    [set studying? true                                                ;In the left and right third studying can be done
+      set timer4 100]]                                                 ;Per tick a 5% chance visitors (child? = false) will start studying
+                                                                       ;Studying students stand still
+  ifelse timer4 > 0 and studying? = true                               ;lasts 100 ticks
     [set timer4 timer4 - 1]
     [set studying? false]
 
 end
-
-to ask-at-desk ;moet getriggered worden als ze in radius van een paarse patch zijn
-  if random 101 < 15 and asking-at-desk? = false
-    [set asking-at-desk? true
-      set timer5 20]
+                                                                       
+to ask-at-desk                                                         ;Visitors near desks (purple patches) can ask a question
+  if random 101 < 15 and asking-at-desk? = false                       ;Per tick near a desk, 15% chance visitors (child? = false) will ask a question
+    [set asking-at-desk? true                                          ;Visitors asking questions stand still
+      set timer5 20]                                                   ;lasts 20 ticks
   
   ifelse timer5 > 0 and asking-at-desk? = true
     [set timer5 timer5 - 1]

@@ -311,7 +311,7 @@ percentage-female
 percentage-female
 0
 100
-0.0
+100.0
 1
 1
 %
@@ -326,7 +326,7 @@ percentage-children
 percentage-children
 0
 100
-0.0
+25.0
 1
 1
 %
@@ -350,7 +350,7 @@ SWITCH
 171
 alarm?
 alarm?
-0
+1
 1
 -1000
 
@@ -433,7 +433,7 @@ percentage-visitors-go-to-preferred-exit
 percentage-visitors-go-to-preferred-exit
 0
 100
-95.0
+100.0
 1
 1
 NIL
@@ -529,7 +529,7 @@ CHOOSER
 Preferred-exit-door
 Preferred-exit-door
 "main" "lower-left" "upper-right"
-0
+2
 
 @#$#@#$#@
 ## WHAT IS IT?
