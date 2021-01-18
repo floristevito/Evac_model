@@ -311,7 +311,7 @@ percentage-female
 percentage-female
 0
 100
-100.0
+40.7
 1
 1
 %
@@ -326,7 +326,7 @@ percentage-children
 percentage-children
 0
 100
-25.0
+5.5
 1
 1
 %
@@ -350,7 +350,7 @@ SWITCH
 171
 alarm?
 alarm?
-1
+0
 1
 -1000
 
@@ -433,7 +433,7 @@ percentage-visitors-go-to-preferred-exit
 percentage-visitors-go-to-preferred-exit
 0
 100
-100.0
+96.0
 1
 1
 NIL
@@ -448,7 +448,7 @@ max-turtles-per-patch
 max-turtles-per-patch
 1
 8
-2.0
+1.0
 1
 1
 NIL
@@ -463,7 +463,7 @@ alerting-range
 alerting-range
 0
 10
-2.0
+6.6
 1
 1
 NIL
@@ -529,7 +529,7 @@ CHOOSER
 Preferred-exit-door
 Preferred-exit-door
 "main" "lower-left" "upper-right"
-2
+0
 
 @#$#@#$#@
 ## WHAT IS IT?
@@ -915,6 +915,59 @@ NetLogo 6.1.1
     </enumeratedValueSet>
     <enumeratedValueSet variable="alerting-range">
       <value value="6"/>
+    </enumeratedValueSet>
+  </experiment>
+  <experiment name="experiment" repetitions="20" runMetricsEveryStep="true">
+    <setup>setup</setup>
+    <go>go</go>
+    <metric>evacuation-duration</metric>
+    <metric>event-duration</metric>
+    <metric>people-in-building</metric>
+    <metric>staff-members-in-building</metric>
+    <metric>visitors-in-building</metric>
+    <metric>precision ((count visitors with [evacuating? = false] / count visitors) * 100) 2</metric>
+    <enumeratedValueSet variable="percentage-female">
+      <value value="33.3"/>
+      <value value="37"/>
+      <value value="40.7"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="percentage-stationary-staff">
+      <value value="50"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="alarm?">
+      <value value="false"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="percentage-children">
+      <value value="4.5"/>
+      <value value="5"/>
+      <value value="5.5"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="max-turtles-per-patch">
+      <value value="1"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="debug?">
+      <value value="false"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="Preferred-exit-door">
+      <value value="&quot;main&quot;"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="average-response-time">
+      <value value="60"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="agents-at-start">
+      <value value="450"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="verbose?">
+      <value value="true"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="percentage-visitors-go-to-preferred-exit">
+      <value value="86.4"/>
+      <value value="96"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="alerting-range">
+      <value value="5.4"/>
+      <value value="6"/>
+      <value value="6.6"/>
     </enumeratedValueSet>
   </experiment>
 </experiments>
