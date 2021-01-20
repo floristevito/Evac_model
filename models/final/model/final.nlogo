@@ -311,7 +311,7 @@ percentage-female
 percentage-female
 0
 100
-0.0
+40.7
 1
 1
 %
@@ -326,7 +326,7 @@ percentage-children
 percentage-children
 0
 100
-0.0
+5.5
 1
 1
 %
@@ -350,7 +350,7 @@ SWITCH
 171
 alarm?
 alarm?
-0
+1
 1
 -1000
 
@@ -433,7 +433,7 @@ percentage-visitors-go-to-preferred-exit
 percentage-visitors-go-to-preferred-exit
 0
 100
-95.0
+96.0
 1
 1
 NIL
@@ -448,7 +448,7 @@ max-turtles-per-patch
 max-turtles-per-patch
 1
 8
-2.0
+1.0
 1
 1
 NIL
@@ -463,7 +463,7 @@ alerting-range
 alerting-range
 0
 10
-2.0
+6.6
 1
 1
 NIL
@@ -534,39 +534,95 @@ Preferred-exit-door
 @#$#@#$#@
 ## WHAT IS IT?
 
-(a general understanding of what the model is trying to show or explain)
+This model models the evacutaion of the TU Delft library. 
 
 ## HOW IT WORKS
 
-(what rules the agents use to create the overall behavior of the model)
+The model simulates an evacuation in the TU Delft library. 
+
+- When the simulation starts, the model first start with normal behaviour. Visitors and staff members randomly walk around and perform tasks for about 30 ticks. 
+- After 30 ticks, the alarm rings. Some visitors remain busy with their task and evacuate after completing this task. 
+- The model stops when all agents have evacuated. 
 
 ## HOW TO USE IT
+- The model should first be setup with the setup button. 
+- After this, the model can be run for just one tick, or the entire simulation using the button 'go'
 
-(how to use the model, including a description of each of the items in the Interface tab)
+## Parameters
 
-## THINGS TO NOTICE
-
-(suggested things for the user to notice while running the model)
+<table>
+    <tr>
+        <td>Parameter</td>
+        <td>Description</td>
+        <td>Range</td>
+        <td>Unit</td>
+    </tr>
+    <tr>
+        <td>agents-at-start</td>
+        <td>Total numbers of people at the start</td>
+        <td>50-5000</td>
+        <td>Persons</td>
+    </tr>
+    <tr>
+        <td>percentage-female</td>
+        <td>Percentage of people female</td>
+        <td>0-100%</td>
+        <td>-</td>
+    </tr>
+    <tr>
+        <td>percentage-children</td>
+        <td>Percentage of people children</td>
+        <td>0-100%</td>
+        <td>-</td>
+    </tr>
+    <tr>
+        <td>percentage-stationary-staff</td>
+        <td>Percentage of staff that will remain stationary during a non-evacuation situation</td>
+        <td>0-100%</td>
+        <td>-</td>
+    </tr>
+    <tr>
+        <td>alerting-range</td>
+        <td>Range in which staff members can alert visitors during an evacuation</td>
+        <td>0-10</td>
+        <td>Patches (1,5 m2 )</td>
+    </tr>
+    <tr>
+        <td>average-response-time</td>
+        <td>Average time it takes for people to start evacuating</td>
+        <td>0-120</td>
+        <td>Ticks (seconds)</td>
+    </tr>
+    <tr>
+        <td>max-turtles-per-patch</td>
+        <td>Maximum number of turtles allowed on patch during an evacuation</td>
+        <td>1-aug</td>
+        <td>Persons/patch</td>
+    </tr>
+    <tr>
+        <td>percentage-visitors-go-to-preferred-exit</td>
+        <td>Percentage of visitors that will initially go to the selected preferred exit</td>
+        <td>0-100%</td>
+        <td>-</td>
+    </tr>
+    <tr>
+        <td>Preferred-exit-door</td>
+        <td>Enables the model to pick a specific exit that people will take</td>
+        <td>“upper-right”, “upper-left”, “main”</td>
+        <td>-</td>
+    </tr>
+</table>
 
 ## THINGS TO TRY
 
-(suggested things for the user to try to do (move sliders, switches, etc.) with the model)
+- Edit the max-turtles-per-patch parameter while the model is running, to directly see the effect. 
+
+- Try simulating the model with more agents. The model simulates smoothly up to 5000 agents. 
+
 
 ## EXTENDING THE MODEL
 
-(suggested things to add or change in the Code tab to make the model more complicated, detailed, accurate, etc.)
-
-## NETLOGO FEATURES
-
-(interesting or unusual features of NetLogo that the model uses, particularly in the Code tab; or where workarounds were needed for missing features)
-
-## RELATED MODELS
-
-(models in the NetLogo Models Library and elsewhere which are of related interest)
-
-## CREDITS AND REFERENCES
-
-(a reference to the model's URL on the web if it has one, as well as any other necessary credits, citations, and links)
+- A suggested extension, might be the modelling of the fire spreading, making some exits closed. 
 @#$#@#$#@
 default
 true
@@ -915,6 +971,59 @@ NetLogo 6.1.1
     </enumeratedValueSet>
     <enumeratedValueSet variable="alerting-range">
       <value value="6"/>
+    </enumeratedValueSet>
+  </experiment>
+  <experiment name="experiment" repetitions="20" runMetricsEveryStep="true">
+    <setup>setup</setup>
+    <go>go</go>
+    <metric>evacuation-duration</metric>
+    <metric>event-duration</metric>
+    <metric>people-in-building</metric>
+    <metric>staff-members-in-building</metric>
+    <metric>visitors-in-building</metric>
+    <metric>precision ((count visitors with [evacuating? = false] / count visitors) * 100) 2</metric>
+    <enumeratedValueSet variable="percentage-female">
+      <value value="33.3"/>
+      <value value="37"/>
+      <value value="40.7"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="percentage-stationary-staff">
+      <value value="50"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="alarm?">
+      <value value="false"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="percentage-children">
+      <value value="4.5"/>
+      <value value="5"/>
+      <value value="5.5"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="max-turtles-per-patch">
+      <value value="1"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="debug?">
+      <value value="false"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="Preferred-exit-door">
+      <value value="&quot;main&quot;"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="average-response-time">
+      <value value="60"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="agents-at-start">
+      <value value="450"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="verbose?">
+      <value value="true"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="percentage-visitors-go-to-preferred-exit">
+      <value value="86.4"/>
+      <value value="96"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="alerting-range">
+      <value value="5.4"/>
+      <value value="6"/>
+      <value value="6.6"/>
     </enumeratedValueSet>
   </experiment>
 </experiments>
