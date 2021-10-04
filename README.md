@@ -1,2 +1,1 @@
-# SEN1211_project
- Project assignment for SEN1211
+An evacutation model made in NetLogo
